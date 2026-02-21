@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Advanced Math Solver</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+display:flex;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+min-height:100vh;
+color:white;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:240px;
+background:rgba(0,0,0,0.4);
+backdrop-filter:blur(15px);
+padding:30px 20px;
+display:flex;
+flex-direction:column;
+position:fixed;
+height:100%;
+box-shadow:5px 0 25px rgba(0,0,0,0.5);
+}
+
+.sidebar h2{
+color:#00f2ff;
+margin-bottom:30px;
+text-align:center;
+}
+
+.sidebar a{
+padding:12px;
+margin:5px 0;
+border-radius:8px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.sidebar a:hover{
+background:linear-gradient(45deg,#00f2ff,#4facfe);
+color:black;
+transform:translateX(5px);
+}
+
+/* MAIN */
+
+.main-content{
+margin-left:240px;
+width:100%;
+padding:40px;
+}
+
+/* SECTIONS */
+
+section{
+display:none;
+animation:fade 0.4s ease-in-out;
+}
+
+.active{
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(20px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+h1,h2{
+margin-bottom:20px;
+color:#00f2ff;
+}
+
+/* CARD STYLE */
+
+section{
+background:rgba(255,255,255,0.05);
+padding:40px;
+border-radius:15px;
+box-shadow:0 10px 40px rgba(0,0,0,0.4);
+}
+
+/* INPUT */
+
+input{
+padding:12px;
+margin:6px;
+border:none;
+border-radius:10px;
+background:rgba(255,255,255,0.1);
+color:white;
+outline:none;
+transition:0.3s;
+}
+
+input:focus{
+background:rgba(0,242,255,0.2);
+}
+
+/* BUTTON */
+
+button{
+padding:10px 20px;
+margin:8px;
+border:none;
+border-radius:10px;
+background:linear-gradient(45deg,#00f2ff,#4facfe);
+color:black;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+transform:scale(1.07);
+box-shadow:0 8px 25px rgba(0,242,255,0.5);
+}
+
+/* RESULT BOX */
+
+div{
+margin-top:15px;
+padding:15px;
+background:rgba(0,0,0,0.4);
+border-radius:10px;
+min-width:250px;
+text-align:center;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.sidebar{
+width:70px;
+padding:20px 5px;
+}
+
+.sidebar h2{
+display:none;
+}
+
+.sidebar a{
+font-size:12px;
+text-align:center;
+}
+
+.main-content{
+margin-left:70px;
+padding:20px;
+}
+
+section{
+padding:20px;
+}
+
+}
+/* MATRIX */
+
+.matrix-container{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:40px;
+flex-wrap:wrap;
+margin:20px 0;
+}
+
+.matrix-box{
+text-align:center;
+}
+
+.matrix-grid{
+display:grid;
+grid-template-columns:repeat(2,60px);
+gap:10px;
+}
+
+.matrix-operator{
+font-size:40px;
+color:#00f2ff;
+}
+
+.matrix-buttons{
+margin:20px 0;
+}
+
+/* MATRIX 3x3 */
+
+.matrix-3-container{
+display:flex;
+flex-direction:column;
+gap:10px;
+margin-bottom:15px;
+}
+
+/* BINARY */
+
+.binary-card{
+background:rgba(255,255,255,0.05);
+padding:25px;
+border-radius:15px;
+margin:20px auto;
+width:350px;
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
+text-align:center;
+}
+
+.binary-buttons{
+margin-top:10px;
+}
+/* ===== MOBILE RESPONSIVE FIX ===== */
+
+@media (max-width: 768px){
+
+  body{
+    flex-direction: column;
+  }
+
+  /* sidebar بگۆڕە بۆ top navbar */
+  .sidebar{
+    width:100%;
+    height:auto;
+    position:relative;
+    display:flex;
+    flex-direction:row;
+    justify-content:space-around;
+    align-items:center;
+    padding:10px 0;
+  }
+
+  .sidebar h2{
+    display:none; /* MathSolver title بشارەوە */
+  }
+
+  .sidebar a{
+    font-size:14px;
+    padding:8px;
+  }
+
+  /* content full width */
+  .main-content{
+    width:100%;
+    padding:15px;
+  }
+
+}
+/* ===== EXTRA MOBILE CLEAN FIX ===== */
+
+@media (max-width:768px){
+
+  /* هەموو card ـەکان */
+  .card{
+    padding:15px;
+    margin-bottom:20px;
+    border-radius:15px;
+  }
+
+  /* input ـەکان */
+  input, select, button{
+    width:100% !important;
+    margin-bottom:12px;
+    font-size:16px;
+  }
+
+  /* matrix grid لە مۆبایلدا */
+  .matrix-grid{
+    grid-template-columns: repeat(auto-fit, minmax(45px,1fr));
+    gap:8px;
+  }
+
+  .matrix-grid input{
+    width:100%;
+    height:45px;
+    font-size:14px;
+  }
+
+  /* button ـەکان */
+  button{
+    padding:12px;
+    border-radius:25px;
+  }
+
+  /* result box */
+  .matrix-result,
+  #linearResult,
+  #quadResult{
+    font-size:15px;
+    padding:12px;
+  }
+
+}
+.home-description{
+  max-width:800px;
+  margin:auto;
+  padding:40px;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(10px);
+  border-radius:25px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.2);
+  text-align:center;
+  color:white;
+}
+
+.home-description h1{
+  font-size:40px;
+  margin-bottom:20px;
+  background:linear-gradient(90deg,#00f5d4,#00bbf9);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.home-description p{
+  font-size:18px;
+  line-height:1.8;
+  margin-bottom:20px;
+}
+
+.home-description .team{
+  margin-top:30px;
+  font-size:20px;
+  font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>MathSolver</h2>
+    <a onclick="show('home')">Home</a>
+    <a onclick="show('matrix')">Matrix</a>
+    <a onclick="show('binary')">Binary</a>
+    <a onclick="show('prime')">Prime</a>
+    <a onclick="show('calculus')">Calculus</a>
+</div>
+
+<div class="main-content">
+
+<!-- HOME -->
+<!-- HOME -->
+<section id="home" class="section active">
+
+  <div class="home-description">
+    <h1>Welcome to MathSolver</h1>
+  <p>
+    MathSolver is more than just a calculator — it is a smart academic platform 
+    built to make mathematics clear, interactive, and easier to understand.
+  </p>
+
+  <p>
+    From algebra and matrix operations to binary systems, prime factorization, 
+    and introductory calculus, our goal is to provide clean step-by-step solutions 
+    that help students truly understand the logic behind every problem.
+  </p>
+
+  <p class="team">
+    Proudly developed by our team:
+    </p><strong>Mohammed Barzan</strong></p>
+   </p> <strong>Zhalla Karwan</strong></p>
+   </p> <strong>Anas Muhsin</strong></p>
+  </p>
+</div>
+</section>
+
+<!-- MATRIX -->
+<section id="matrix">
+
+<h2>Matrix 2x2 Operations</h2>
+
+<div class="matrix-container">
+
+<div class="matrix-box">
+<h3>Matrix A</h3>
+<div class="matrix-grid">
+<input id="m1"><input id="m2">
+<input id="m3"><input id="m4">
+</div>
+</div>
+
+
+
+<div class="matrix-box">
+<h3>Matrix B</h3>
+<div class="matrix-grid">
+<input id="m5"><input id="m6">
+<input id="m7"><input id="m8">
+</div>
+</div>
+
+</div>
+
+<div class="matrix-buttons">
+<button onclick="addMatrix()">Add</button>
+<button onclick="subMatrix()">Subtract</button>
+<button onclick="mulMatrix()">Multiply</button>
+</div>
+
+<div id="matrixResult"></div>
+<div id="matrixSubResult"></div>
+<div id="matrixMulResult"></div>
+
+<hr>
+
+<h2>Matrix 3x3 Addition</h2>
+
+<div class="matrix-3-container">
+<input id="m3x3a" placeholder="Matrix A (9 numbers comma)">
+<input id="m3x3b" placeholder="Matrix B (9 numbers comma)">
+</div>
+
+<button onclick="add3x3()">Add 3x3</button>
+<div id="matrix3Result"></div>
+
+</section>
+
+<!-- BINARY -->
+<section id="binary">
+
+<h2>Binary Converter</h2>
+
+<div class="binary-card">
+<h3>Binary → Decimal</h3>
+<input id="binaryInput">
+<button onclick="binaryToDecimal()">Convert</button>
+<div id="binaryResult"></div>
+</div>
+
+<div class="binary-card">
+<h3>Decimal → Binary</h3>
+<input id="decimalInput">
+<button onclick="decimalToBinary()">Convert</button>
+<div id="decimalResult"></div>
+</div>
+
+<div class="binary-card">
+<h3>Binary Operations</h3>
+<input id="bin1" placeholder="Binary 1">
+<input id="bin2" placeholder="Binary 2">
+
+<div class="binary-buttons">
+<button onclick="binaryAdd()">+</button>
+<button onclick="binarySub()">−</button>
+<button onclick="binaryMul()">×</button>
+<button onclick="binaryDiv()">÷</button>
+</div>
+
+<div id="binaryOpResult"></div>
+</div>
+
+</section>
+
+<!-- PRIME -->
+<section id="prime">
+<h2>Prime Factorization</h2>
+<input id="primeInput">
+<button onclick="primeFactor()">Factor</button>
+<div id="primeResult"></div>
+</section>
+
+<!-- CALCULUS -->
+<section id="calculus">
+<h2>Derivative of ax^n</h2>
+<input id="coef" placeholder="a">
+<input id="power" placeholder="n">
+<button onclick="derivative()">Differentiate</button>
+<div id="derivativeResult"></div>
+
+<h2>Integral of ax^n</h2>
+<input id="icoef" placeholder="a">
+<input id="ipower" placeholder="n">
+<button onclick="integral()">Integrate</button>
+<div id="integralResult"></div>
+</section>
+
+<script>
+
+function show(id){
+document.querySelectorAll("section").forEach(sec=>sec.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+}
+
+/* LINEAR */
+function solveLinear(){
+let a1=parseFloat(a1.value);
+let b1=parseFloat(b1.value);
+let c1=parseFloat(c1.value);
+let a2=parseFloat(a2.value);
+let b2=parseFloat(b2.value);
+let c2=parseFloat(c2.value);
+
+let d=a1*b2-a2*b1;
+if(d==0){
+linearResult.innerHTML="No unique solution";
+return;
+}
+let x=(c1*b2-c2*b1)/d;
+let y=(a1*c2-a2*c1)/d;
+
+linearResult.innerHTML=
+"Step1: Determinant="+d+"<br>"+
+"Step2: x="+x+"<br>"+
+"Step3: y="+y;
+}
+
+/* QUADRATIC */
+function solveQuadratic(){
+let a=parseFloat(qa.value);
+let b=parseFloat(qb.value);
+let c=parseFloat(qc.value);
+
+let d=b*b-4*a*c;
+if(d<0){
+quadResult.innerHTML="No Real Roots";
+return;
+}
+
+let x1=(-b+Math.sqrt(d))/(2*a);
+let x2=(-b-Math.sqrt(d))/(2*a);
+
+quadResult.innerHTML=
+"Step1: Δ="+d+"<br>"+
+"x1="+x1+"<br>"+
+"x2="+x2;
+}
+
+/* MATRIX ADD */
+function addMatrix(){
+let r1=parseFloat(m1.value)+parseFloat(m5.value);
+let r2=parseFloat(m2.value)+parseFloat(m6.value);
+let r3=parseFloat(m3.value)+parseFloat(m7.value);
+let r4=parseFloat(m4.value)+parseFloat(m8.value);
+
+matrixResult.innerHTML=
+r1+" "+r2+"<br>"+r3+" "+r4;
+}
+
+/* BINARY */
+function binaryToDecimal(){
+let bin=binaryInput.value;
+let dec=parseInt(bin,2);
+binaryResult.innerHTML="Decimal="+dec;
+}
+
+/* PRIME */
+function primeFactor(){
+let n=parseInt(primeInput.value);
+let result="";
+for(let i=2;i<=n;i++){
+while(n%i==0){
+result+=i+" ";
+n/=i;
+}
+}
+primeResult.innerHTML=result;
+}
+
+/* DERIVATIVE */
+function derivative(){
+let a=parseFloat(coef.value);
+let n=parseFloat(power.value);
+
+let newCoef=a*n;
+let newPower=n-1;
+
+derivativeResult.innerHTML=
+"Derivative="+newCoef+"x^"+newPower;
+}
+
+/* INTEGRAL */
+function integral(){
+let a=parseFloat(icoef.value);
+let n=parseFloat(ipower.value);
+
+let newPower=n+1;
+let newCoef=a/(n+1);
+
+integralResult.innerHTML=
+"Integral="+newCoef+"x^"+newPower+" + C";
+}
+/* MATRIX SUB */
+function subMatrix(){
+let r1=parseFloat(m1.value)-parseFloat(m5.value);
+let r2=parseFloat(m2.value)-parseFloat(m6.value);
+let r3=parseFloat(m3.value)-parseFloat(m7.value);
+let r4=parseFloat(m4.value)-parseFloat(m8.value);
+
+matrixSubResult.innerHTML=
+r1+" "+r2+"<br>"+r3+" "+r4;
+}
+
+/* MATRIX MUL */
+function mulMatrix(){
+let a=m1.value,b=m2.value,c=m3.value,d=m4.value;
+let e=m5.value,f=m6.value,g=m7.value,h=m8.value;
+
+let r1=a*e+b*g;
+let r2=a*f+b*h;
+let r3=c*e+d*g;
+let r4=c*f+d*h;
+
+matrixMulResult.innerHTML=
+r1+" "+r2+"<br>"+r3+" "+r4;
+}
+
+/* MATRIX 3x3 ADD */
+function add3x3(){
+let A=m3x3a.value.split(",");
+let B=m3x3b.value.split(",");
+let result="";
+for(let i=0;i<9;i++){
+result+= (parseFloat(A[i])+parseFloat(B[i]))+" ";
+if((i+1)%3==0) result+="<br>";
+}
+matrix3Result.innerHTML=result;
+}
+
+/* DECIMAL TO BINARY */
+function decimalToBinary(){
+let dec=parseInt(decimalInput.value);
+decimalResult.innerHTML="Binary="+dec.toString(2);
+}
+
+/* BINARY ADD */
+function binaryAdd(){
+let r=(parseInt(bin1.value,2)+parseInt(bin2.value,2)).toString(2);
+binaryOpResult.innerHTML=r;
+}
+
+/* BINARY SUB */
+function binarySub(){
+let r=(parseInt(bin1.value,2)-parseInt(bin2.value,2)).toString(2);
+binaryOpResult.innerHTML=r;
+}
+
+/* BINARY MUL */
+function binaryMul(){
+let r=(parseInt(bin1.value,2)*parseInt(bin2.value,2)).toString(2);
+binaryOpResult.innerHTML=r;
+}
+
+/* BINARY DIV */
+function binaryDiv(){
+let r=(parseInt(bin1.value,2)/parseInt(bin2.value,2)).toString(2);
+binaryOpResult.innerHTML=r;
+}
+
+
+</script>
+</div>
+</body>
+</html>
