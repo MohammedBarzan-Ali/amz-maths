@@ -1,674 +1,1742 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Advanced Math Solver</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMZ Mathematics</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Poppins',sans-serif;
-}
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #18181f;
+    --border: #2a2a3a;
+    --accent: #6c63ff;
+    --accent2: #ff6b6b;
+    --accent3: #43e97b;
+    --accent4: #f9ca24;
+    --text: #e8e8f0;
+    --muted: #7878a0;
+    --glass: rgba(108,99,255,0.08);
+  }
 
-body{
-display:flex;
-background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-min-height:100vh;
-color:white;
-}
+  * { margin:0; padding:0; box-sizing:border-box; }
 
-/* SIDEBAR */
+  html { scroll-behavior: smooth; }
 
-.sidebar{
-width:240px;
-background:rgba(0,0,0,0.4);
-backdrop-filter:blur(15px);
-padding:30px 20px;
-display:flex;
-flex-direction:column;
-position:fixed;
-height:100%;
-box-shadow:5px 0 25px rgba(0,0,0,0.5);
-}
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-.sidebar h2{
-color:#00f2ff;
-margin-bottom:30px;
-text-align:center;
-}
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events:none;
+    z-index:0;
+  }
 
-.sidebar a{
-padding:12px;
-margin:5px 0;
-border-radius:8px;
-cursor:pointer;
-transition:0.3s;
-}
+  /* ─── TOP NAV ─── */
+  nav {
+    position: fixed;
+    top:0; left:0; right:0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 64px;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
 
-.sidebar a:hover{
-background:linear-gradient(45deg,#00f2ff,#4facfe);
-color:black;
-transform:translateX(5px);
-}
+  .nav-logo {
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
 
-/* MAIN */
+  .nav-logo span { color: var(--text); }
 
-.main-content{
-margin-left:240px;
-width:100%;
-padding:40px;
-}
+  .nav-links {
+    display: flex;
+    gap: 8px;
+  }
 
-/* SECTIONS */
+  .nav-links button {
+    background: none;
+    border: 1px solid transparent;
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
 
-section{
-display:none;
-animation:fade 0.4s ease-in-out;
-}
+  .nav-links button:hover,
+  .nav-links button.active {
+    color: var(--text);
+    border-color: var(--accent);
+    background: var(--glass);
+  }
 
-.active{
-display:flex;
-flex-direction:column;
-align-items:center;
-}
+  /* ─── PAGES ─── */
+  .page { display:none; min-height:100vh; }
+  .page.active { display:block; }
 
-@keyframes fade{
-from{opacity:0;transform:translateY(20px);}
-to{opacity:1;transform:translateY(0);}
-}
+  /* ─── HOME PAGE ─── */
+  #page-home {
+    padding-top: 64px;
+  }
 
-h1,h2{
-margin-bottom:20px;
-color:#00f2ff;
-}
+  .hero {
+    position: relative;
+    text-align: center;
+    padding: 100px 40px 60px;
+    overflow: hidden;
+  }
 
-/* CARD STYLE */
+  .hero-glow {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 600px; height: 400px;
+    background: radial-gradient(ellipse, rgba(108,99,255,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
 
-section{
-background:rgba(255,255,255,0.05);
-padding:40px;
-border-radius:15px;
-box-shadow:0 10px 40px rgba(0,0,0,0.4);
-}
+  .hero-badge {
+    display: inline-block;
+    padding: 5px 16px;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
 
-/* INPUT */
+  .hero h1 {
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 20px;
+  }
 
-input{
-padding:12px;
-margin:6px;
-border:none;
-border-radius:10px;
-background:rgba(255,255,255,0.1);
-color:white;
-outline:none;
-transition:0.3s;
-}
+  .hero h1 .hl { color: var(--accent); }
 
-input:focus{
-background:rgba(0,242,255,0.2);
-}
+  .hero p {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 520px;
+    margin: 0 auto 48px;
+    line-height: 1.7;
+    font-weight: 400;
+  }
 
-/* BUTTON */
+  /* ─── SUBJECT CARDS ─── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 0 40px 80px;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
 
-button{
-padding:10px 20px;
-margin:8px;
-border:none;
-border-radius:10px;
-background:linear-gradient(45deg,#00f2ff,#4facfe);
-color:black;
-font-weight:bold;
-cursor:pointer;
-transition:0.3s;
-}
+  .subject-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    position: relative;
+    overflow: hidden;
+  }
 
-button:hover{
-transform:scale(1.07);
-box-shadow:0 8px 25px rgba(0,242,255,0.5);
-}
+  .subject-card::before {
+    content:'';
+    position:absolute;
+    inset:0;
+    background: var(--card-glow, rgba(108,99,255,0.05));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
 
-/* RESULT BOX */
+  .subject-card:hover { transform: translateY(-6px); border-color: var(--card-color, var(--accent)); }
+  .subject-card:hover::before { opacity: 1; }
 
-div{
-margin-top:15px;
-padding:15px;
-background:rgba(0,0,0,0.4);
-border-radius:10px;
-min-width:250px;
-text-align:center;
-}
+  .card-icon {
+    width: 52px; height: 52px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 18px;
+    background: var(--card-icon-bg, rgba(108,99,255,0.15));
+  }
 
-/* MOBILE */
+  .subject-card h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
 
-@media(max-width:768px){
+  .subject-card p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
 
-.sidebar{
-width:70px;
-padding:20px 5px;
-}
+  .card-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
 
-.sidebar h2{
-display:none;
-}
+  .topic-chip {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
 
-.sidebar a{
-font-size:12px;
-text-align:center;
-}
+  .card-arrow {
+    position: absolute;
+    top: 24px; right: 24px;
+    font-size: 1.2rem;
+    opacity: 0.3;
+    transition: all 0.3s;
+  }
 
-.main-content{
-margin-left:70px;
-padding:20px;
-}
+  .subject-card:hover .card-arrow { opacity: 1; transform: translate(4px, -4px); }
 
-section{
-padding:20px;
-}
+  /* ─── SOLVER PAGES ─── */
+  .solver-page {
+    padding-top: 64px;
+    min-height: 100vh;
+  }
 
-}
-/* MATRIX */
+  .solver-header {
+    padding: 48px 40px 32px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
 
-.matrix-container{
-display:flex;
-align-items:center;
-justify-content:center;
-gap:40px;
-flex-wrap:wrap;
-margin:20px 0;
-}
+  .solver-header .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 7px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: all 0.2s;
+  }
 
-.matrix-box{
-text-align:center;
-}
+  .solver-header .back-btn:hover { color: var(--text); border-color: var(--accent); }
 
-.matrix-grid{
-display:grid;
-grid-template-columns:repeat(2,60px);
-gap:10px;
-}
+  .solver-header h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
 
-.matrix-operator{
-font-size:40px;
-color:#00f2ff;
-}
+  .solver-header .subtitle {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-top: 6px;
+  }
 
-.matrix-buttons{
-margin:20px 0;
-}
+  /* ─── SUB-TOPICS TABS ─── */
+  .tabs {
+    display: flex;
+    gap: 6px;
+    padding: 24px 40px 0;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
 
-/* MATRIX 3x3 */
+  .tab-btn {
+    background: none;
+    border: 1px solid transparent;
+    border-bottom: none;
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
 
-.matrix-3-container{
-display:flex;
-flex-direction:column;
-gap:10px;
-margin-bottom:15px;
-}
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active {
+    color: var(--text);
+    background: var(--bg);
+    border-color: var(--border);
+    border-bottom-color: var(--bg);
+    margin-bottom: -1px;
+  }
 
-/* BINARY */
+  /* ─── SOLVER BODY ─── */
+  .solver-body {
+    padding: 40px;
+    max-width: 900px;
+  }
 
-.binary-card{
-background:rgba(255,255,255,0.05);
-padding:25px;
-border-radius:15px;
-margin:20px auto;
-width:350px;
-box-shadow:0 10px 30px rgba(0,0,0,0.4);
-text-align:center;
-}
+  .topic-panel { display:none; }
+  .topic-panel.active { display:block; }
 
-.binary-buttons{
-margin-top:10px;
-}
-/* ===== MOBILE RESPONSIVE FIX ===== */
+  .input-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    margin-bottom: 24px;
+  }
 
-@media (max-width: 768px){
+  .input-section h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 18px;
+  }
 
-  body{
+  .field-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+
+  .field-group {
+    display: flex;
     flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 160px;
   }
 
-  /* sidebar بگۆڕە بۆ top navbar */
-  .sidebar{
-    width:100%;
-    height:auto;
-    position:relative;
-    display:flex;
-    flex-direction:row;
-    justify-content:space-around;
-    align-items:center;
-    padding:10px 0;
+  .field-group label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.5px;
   }
 
-  .sidebar h2{
-    display:none; /* MathSolver title بشارەوە */
+  input[type="text"], input[type="number"], select, textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.92rem;
+    padding: 10px 14px;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
   }
 
-  .sidebar a{
-    font-size:14px;
-    padding:8px;
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--accent);
   }
 
-  /* content full width */
-  .main-content{
-    width:100%;
-    padding:15px;
+  textarea { resize: vertical; min-height: 80px; }
+
+  .matrix-grid {
+    display: inline-grid;
+    gap: 6px;
+    margin-bottom: 12px;
   }
 
-}
-/* ===== EXTRA MOBILE CLEAN FIX ===== */
-
-@media (max-width:768px){
-
-  /* هەموو card ـەکان */
-  .card{
-    padding:15px;
-    margin-bottom:20px;
-    border-radius:15px;
+  .matrix-grid input {
+    width: 72px;
+    text-align: center;
+    padding: 8px;
   }
 
-  /* input ـەکان */
-  input, select, button{
-    width:100% !important;
-    margin-bottom:12px;
-    font-size:16px;
+  .matrix-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
   }
 
-  /* matrix grid لە مۆبایلدا */
-  .matrix-grid{
-    grid-template-columns: repeat(auto-fit, minmax(45px,1fr));
-    gap:8px;
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    padding: 12px 28px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
   }
 
-  .matrix-grid input{
-    width:100%;
-    height:45px;
-    font-size:14px;
+  .btn-primary:hover { background: #8078ff; transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-secondary {
+    background: var(--surface2);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
   }
 
-  /* button ـەکان */
-  button{
-    padding:12px;
-    border-radius:25px;
+  .btn-secondary:hover { color: var(--text); border-color: var(--muted); }
+
+  /* ─── RESULT PANEL ─── */
+  .result-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    display: none;
   }
 
-  /* result box */
-  .matrix-result,
-  #linearResult,
-  #quadResult{
-    font-size:15px;
-    padding:12px;
+  .result-panel.show { display:block; }
+
+  .result-header {
+    padding: 16px 24px;
+    background: rgba(108,99,255,0.1);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 
-}
-.home-description{
-  max-width:800px;
-  margin:auto;
-  padding:40px;
-  background:rgba(255,255,255,0.05);
-  backdrop-filter:blur(10px);
-  border-radius:25px;
-  box-shadow:0 20px 40px rgba(0,0,0,0.2);
-  text-align:center;
-  color:white;
-}
+  .result-header .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent3);
+    box-shadow: 0 0 8px var(--accent3);
+  }
 
-.home-description h1{
-  font-size:40px;
-  margin-bottom:20px;
-  background:linear-gradient(90deg,#00f5d4,#00bbf9);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
+  .result-header span {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
 
-.home-description p{
-  font-size:18px;
-  line-height:1.8;
-  margin-bottom:20px;
-}
+  .steps-container {
+    padding: 24px;
+  }
 
-.home-description .team{
-  margin-top:30px;
-  font-size:20px;
-  font-weight:bold;
-}
-  .section{
-  display: none;
-}
+  .step {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+    animation: stepIn 0.4s ease both;
+  }
 
-.section.active{
-  display: block;
-}
+  @keyframes stepIn {
+    from { opacity:0; transform: translateX(-16px); }
+    to { opacity:1; transform: translateX(0); }
+  }
+
+  .step-num {
+    flex-shrink: 0;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 2px;
+  }
+
+  .step-content {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+  }
+
+  .step-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+
+  .step-body {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .step-body .highlight { color: var(--accent); font-weight: 600; }
+  .step-body .op { color: var(--accent2); }
+  .step-body .result-val { color: var(--accent3); font-weight: 700; font-size: 1.05em; }
+
+  .final-answer {
+    margin: 16px 0 0;
+    padding: 18px 24px;
+    background: linear-gradient(135deg, rgba(67,233,123,0.1), rgba(108,99,255,0.1));
+    border: 1px solid rgba(67,233,123,0.3);
+    border-radius: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--accent3);
+    text-align: center;
+  }
+
+  .error-msg {
+    padding: 14px 20px;
+    background: rgba(255,107,107,0.1);
+    border: 1px solid rgba(255,107,107,0.3);
+    border-radius: 10px;
+    color: var(--accent2);
+    font-size: 0.88rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .matrix-display {
+    display: inline-grid;
+    gap: 4px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88rem;
+    margin: 4px;
+  }
+
+  .matrix-display .mrow {
+    display: flex;
+    gap: 12px;
+  }
+
+  .matrix-display .mcell {
+    min-width: 36px;
+    text-align: right;
+    color: var(--accent);
+  }
+
+  /* ─── PRIME NUMBER LIST ─── */
+  .prime-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .prime-chip {
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.35);
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 6px;
+  }
+
+  .nonprime-chip {
+    background: rgba(255,107,107,0.1);
+    border: 1px solid rgba(255,107,107,0.25);
+    color: var(--accent2);
+  }
+
+  /* ─── SCROLL ANIMATION ─── */
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(24px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+
+  .subject-card { animation: fadeUp 0.5s ease both; }
+  .subject-card:nth-child(1) { animation-delay:0.05s; }
+  .subject-card:nth-child(2) { animation-delay:0.1s; }
+  .subject-card:nth-child(3) { animation-delay:0.15s; }
+  .subject-card:nth-child(4) { animation-delay:0.2s; }
+  .subject-card:nth-child(5) { animation-delay:0.25s; }
+
+  .divider-line {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 10px 0 20px;
+  }
+
+  .divider-line::before, .divider-line::after {
+    content:''; flex:1; height:1px; background:var(--border);
+  }
+
+  .divider-line span {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .size-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    margin-bottom: 16px;
+  }
+
+  .size-row .field-group { flex: 0 0 100px; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    text-align: center;
+    padding: 32px;
+    color: var(--muted);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border);
+  }
+
+  footer span { color: var(--accent); font-weight: 700; }
+
+  @media(max-width:600px) {
+    nav { padding: 0 16px; }
+    .nav-links button { padding: 5px 10px; font-size: 0.72rem; }
+    .hero { padding: 80px 20px 40px; }
+    .cards-grid { padding: 0 16px 40px; }
+    .solver-body { padding: 20px 16px; }
+    .tabs { padding: 16px 16px 0; }
+    .solver-header { padding: 32px 20px 24px; }
+  }
 </style>
 </head>
-
 <body>
 
-<div class="sidebar">
-    <h2>MathSolver</h2>
-    <a onclick="show('home')">Home</a>
-    <a onclick="show('matrix')">Matrix</a>
-    <a onclick="show('binary')">Binary</a>
-    <a onclick="show('prime')">Prime</a>
-    <a onclick="show('calculus')">Calculus</a>
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">AMZ <span>Mathematics</span></div>
+  <div class="nav-links">
+    <button class="active" onclick="showPage('home')">Home</button>
+    <button onclick="showPage('solver')">Solver</button>
+  </div>
+</nav>
+
+<!-- ─── HOME PAGE ─── -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-badge">AMZ GROUP — Mathematics</div>
+    <h1>Solve Math,<br><span class="hl">Step by Step.</span></h1>
+    <p>An interactive mathematics solver covering Discrete Math topics. Enter your values and watch every solution unfold clearly, step by step.</p>
+  </div>
+
+  <div class="cards-grid">
+    <!-- Set Theory -->
+    <div class="subject-card" style="--card-color:#6c63ff;--card-glow:rgba(108,99,255,0.08);--card-icon-bg:rgba(108,99,255,0.15);" onclick="openSolver('set')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon">∪</div>
+      <h3>Set Theory</h3>
+      <p>Explore unions, intersections, differences, and complements of sets with full step-by-step workings.</p>
+      <div class="card-topics">
+        <span class="topic-chip">Union</span>
+        <span class="topic-chip">Intersection</span>
+        <span class="topic-chip">Difference</span>
+        <span class="topic-chip">Complement</span>
+        <span class="topic-chip">Subset</span>
+      </div>
+    </div>
+
+    <!-- Logic -->
+    <div class="subject-card" style="--card-color:#f9ca24;--card-glow:rgba(249,202,36,0.06);--card-icon-bg:rgba(249,202,36,0.12);" onclick="openSolver('logic')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon" style="color:#f9ca24;">⊕</div>
+      <h3>Logic</h3>
+      <p>Evaluate logical propositions using AND, OR, NOT, IMPLIES, XOR and build truth tables automatically.</p>
+      <div class="card-topics">
+        <span class="topic-chip">AND</span>
+        <span class="topic-chip">OR</span>
+        <span class="topic-chip">NOT</span>
+        <span class="topic-chip">IMPLIES</span>
+        <span class="topic-chip">XOR</span>
+        <span class="topic-chip">Truth Table</span>
+      </div>
+    </div>
+
+    <!-- Binary -->
+    <div class="subject-card" style="--card-color:#ff6b6b;--card-glow:rgba(255,107,107,0.06);--card-icon-bg:rgba(255,107,107,0.12);" onclick="openSolver('binary')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon" style="color:#ff6b6b;">01</div>
+      <h3>Binary System</h3>
+      <p>Perform binary arithmetic and convert between binary and decimal with complete bit-level steps.</p>
+      <div class="card-topics">
+        <span class="topic-chip">Addition</span>
+        <span class="topic-chip">Subtraction</span>
+        <span class="topic-chip">Multiplication</span>
+        <span class="topic-chip">Division</span>
+        <span class="topic-chip">Dec↔Bin</span>
+      </div>
+    </div>
+
+    <!-- Matrix -->
+    <div class="subject-card" style="--card-color:#43e97b;--card-glow:rgba(67,233,123,0.06);--card-icon-bg:rgba(67,233,123,0.12);" onclick="openSolver('matrix')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon" style="color:#43e97b;">⊞</div>
+      <h3>Matrix</h3>
+      <p>Add, subtract, multiply matrices and find determinants with element-by-element breakdown.</p>
+      <div class="card-topics">
+        <span class="topic-chip">Addition</span>
+        <span class="topic-chip">Subtraction</span>
+        <span class="topic-chip">Multiply</span>
+        <span class="topic-chip">Determinant</span>
+        <span class="topic-chip">Transpose</span>
+      </div>
+    </div>
+
+    <!-- Prime -->
+    <div class="subject-card" style="--card-color:#ff9f43;--card-glow:rgba(255,159,67,0.06);--card-icon-bg:rgba(255,159,67,0.12);" onclick="openSolver('prime')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon" style="color:#ff9f43;">ℙ</div>
+      <h3>Prime Numbers</h3>
+      <p>Check primality and list all primes in a range using step-by-step divisibility testing.</p>
+      <div class="card-topics">
+        <span class="topic-chip">Primality Test</span>
+        <span class="topic-chip">List Primes</span>
+        <span class="topic-chip">Factorization</span>
+      </div>
+    </div>
+  </div>
+
+  <footer>Built by <span>AMZ GROUP</span> · Lebanese French University · Mathematics Solver</footer>
 </div>
 
-<div class="main-content">
+<!-- ─── SOLVER PAGE ─── -->
+<div id="page-solver" class="page solver-page">
 
-<!-- HOME -->
-<!-- HOME -->
-<section id="home" class="section active">
+  <!-- SET THEORY -->
+  <div id="solver-set" class="solver-section" style="display:none;">
+    <div class="solver-header">
+      <button class="back-btn" onclick="showPage('home')">← Back</button>
+      <h2>Set Theory</h2>
+      <div class="subtitle">Enter sets as comma-separated values (e.g. 1,2,3,4)</div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('set','union')">Union</button>
+      <button class="tab-btn" onclick="switchTab('set','inter')">Intersection</button>
+      <button class="tab-btn" onclick="switchTab('set','diff')">Difference</button>
+      <button class="tab-btn" onclick="switchTab('set','comp')">Complement</button>
+      <button class="tab-btn" onclick="switchTab('set','subset')">Subset Check</button>
+    </div>
+    <div class="solver-body">
+      <!-- Union -->
+      <div id="set-union" class="topic-panel active">
+        <div class="input-section">
+          <h4>Input Sets</h4>
+          <div class="field-row">
+            <div class="field-group"><label>Set A</label><input type="text" id="set-u-a" placeholder="1, 2, 3, 4"></div>
+            <div class="field-group"><label>Set B</label><input type="text" id="set-u-b" placeholder="3, 4, 5, 6"></div>
+          </div>
+          <button class="btn-primary" onclick="solveSetUnion()">Solve A ∪ B →</button>
+        </div>
+        <div id="res-set-union" class="result-panel"></div>
+      </div>
+      <!-- Intersection -->
+      <div id="set-inter" class="topic-panel">
+        <div class="input-section">
+          <h4>Input Sets</h4>
+          <div class="field-row">
+            <div class="field-group"><label>Set A</label><input type="text" id="set-i-a" placeholder="1, 2, 3, 4"></div>
+            <div class="field-group"><label>Set B</label><input type="text" id="set-i-b" placeholder="3, 4, 5, 6"></div>
+          </div>
+          <button class="btn-primary" onclick="solveSetInter()">Solve A ∩ B →</button>
+        </div>
+        <div id="res-set-inter" class="result-panel"></div>
+      </div>
+      <!-- Difference -->
+      <div id="set-diff" class="topic-panel">
+        <div class="input-section">
+          <h4>Input Sets</h4>
+          <div class="field-row">
+            <div class="field-group"><label>Set A</label><input type="text" id="set-d-a" placeholder="1, 2, 3, 4"></div>
+            <div class="field-group"><label>Set B</label><input type="text" id="set-d-b" placeholder="3, 4, 5, 6"></div>
+          </div>
+          <button class="btn-primary" onclick="solveSetDiff()">Solve A − B →</button>
+        </div>
+        <div id="res-set-diff" class="result-panel"></div>
+      </div>
+      <!-- Complement -->
+      <div id="set-comp" class="topic-panel">
+        <div class="input-section">
+          <h4>Input Sets</h4>
+          <div class="field-row">
+            <div class="field-group"><label>Universal Set U</label><input type="text" id="set-c-u" placeholder="1, 2, 3, 4, 5, 6"></div>
+            <div class="field-group"><label>Set A</label><input type="text" id="set-c-a" placeholder="1, 2, 3"></div>
+          </div>
+          <button class="btn-primary" onclick="solveSetComp()">Solve A' →</button>
+        </div>
+        <div id="res-set-comp" class="result-panel"></div>
+      </div>
+      <!-- Subset -->
+      <div id="set-subset" class="topic-panel">
+        <div class="input-section">
+          <h4>Check if A ⊆ B</h4>
+          <div class="field-row">
+            <div class="field-group"><label>Set A</label><input type="text" id="set-s-a" placeholder="1, 2"></div>
+            <div class="field-group"><label>Set B</label><input type="text" id="set-s-b" placeholder="1, 2, 3, 4"></div>
+          </div>
+          <button class="btn-primary" onclick="solveSubset()">Check A ⊆ B →</button>
+        </div>
+        <div id="res-set-subset" class="result-panel"></div>
+      </div>
+    </div>
+  </div>
 
-  <div class="home-description">
-    <h1>Welcome to MathSolver</h1>
-  <p>
-    MathSolver is more than just a calculator — it is a smart academic platform 
-    built to make mathematics clear, interactive, and easier to understand.
-  </p>
+  <!-- LOGIC -->
+  <div id="solver-logic" class="solver-section" style="display:none;">
+    <div class="solver-header">
+      <button class="back-btn" onclick="showPage('home')">← Back</button>
+      <h2>Logic</h2>
+      <div class="subtitle">Use T/F for True/False · Operators: AND, OR, NOT, IMPLIES, XOR</div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('logic','eval')">Evaluate</button>
+      <button class="tab-btn" onclick="switchTab('logic','truth')">Truth Table</button>
+    </div>
+    <div class="solver-body">
+      <!-- Evaluate -->
+      <div id="logic-eval" class="topic-panel active">
+        <div class="input-section">
+          <h4>Logical Expression</h4>
+          <div class="field-row">
+            <div class="field-group"><label>Value of P</label>
+              <select id="logic-p"><option value="true">True (T)</option><option value="false">False (F)</option></select>
+            </div>
+            <div class="field-group"><label>Value of Q</label>
+              <select id="logic-q"><option value="true">True (T)</option><option value="false">False (F)</option></select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group" style="min-width:300px;"><label>Expression (use P, Q, AND, OR, NOT, IMPLIES, XOR)</label>
+              <input type="text" id="logic-expr" placeholder="P AND Q" value="P AND Q">
+            </div>
+          </div>
+          <button class="btn-primary" onclick="solveLogic()">Evaluate →</button>
+        </div>
+        <div id="res-logic-eval" class="result-panel"></div>
+      </div>
+      <!-- Truth Table -->
+      <div id="logic-truth" class="topic-panel">
+        <div class="input-section">
+          <h4>Generate Truth Table</h4>
+          <div class="field-row">
+            <div class="field-group" style="min-width:300px;"><label>Expression (use P, Q)</label>
+              <input type="text" id="logic-tt-expr" placeholder="P AND Q" value="(P OR Q) AND (NOT P)">
+            </div>
+          </div>
+          <button class="btn-primary" onclick="solveTruthTable()">Generate Table →</button>
+        </div>
+        <div id="res-logic-truth" class="result-panel"></div>
+      </div>
+    </div>
+  </div>
 
-  <p>
-    From algebra and matrix operations to binary systems, prime factorization, 
-    and introductory calculus, our goal is to provide clean step-by-step solutions 
-    that help students truly understand the logic behind every problem.
-  </p>
+  <!-- BINARY -->
+  <div id="solver-binary" class="solver-section" style="display:none;">
+    <div class="solver-header">
+      <button class="back-btn" onclick="showPage('home')">← Back</button>
+      <h2>Binary System</h2>
+      <div class="subtitle">Enter binary numbers (e.g. 1011) or decimal values for conversion</div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('binary','badd')">Addition</button>
+      <button class="tab-btn" onclick="switchTab('binary','bsub')">Subtraction</button>
+      <button class="tab-btn" onclick="switchTab('binary','bmul')">Multiplication</button>
+      <button class="tab-btn" onclick="switchTab('binary','bdiv')">Division</button>
+      <button class="tab-btn" onclick="switchTab('binary','d2b')">Dec → Bin</button>
+      <button class="tab-btn" onclick="switchTab('binary','b2d')">Bin → Dec</button>
+    </div>
+    <div class="solver-body">
+      <!-- Binary Add -->
+      <div id="binary-badd" class="topic-panel active">
+        <div class="input-section">
+          <h4>Binary Addition</h4>
+          <div class="field-row">
+            <div class="field-group"><label>Binary A</label><input type="text" id="bin-add-a" placeholder="1011"></div>
+            <div class="field-group"><label>Binary B</label><input type="text" id="bin-add-b" placeholder="0110"></div>
+          </div>
+          <button class="btn-primary" onclick="solveBinAdd()">Add →</button>
+        </div>
+        <div id="res-bin-add" class="result-panel"></div>
+      </div>
+      <!-- Binary Sub -->
+      <div id="binary-bsub" class="topic-panel">
+        <div class="input-section">
+          <h4>Binary Subtraction (A − B)</h4>
+          <div class="field-row">
+            <div class="field-group"><label>Binary A</label><input type="text" id="bin-sub-a" placeholder="1011"></div>
+            <div class="field-group"><label>Binary B</label><input type="text" id="bin-sub-b" placeholder="0101"></div>
+          </div>
+          <button class="btn-primary" onclick="solveBinSub()">Subtract →</button>
+        </div>
+        <div id="res-bin-sub" class="result-panel"></div>
+      </div>
+      <!-- Binary Mul -->
+      <div id="binary-bmul" class="topic-panel">
+        <div class="input-section">
+          <h4>Binary Multiplication</h4>
+          <div class="field-row">
+            <div class="field-group"><label>Binary A</label><input type="text" id="bin-mul-a" placeholder="101"></div>
+            <div class="field-group"><label>Binary B</label><input type="text" id="bin-mul-b" placeholder="011"></div>
+          </div>
+          <button class="btn-primary" onclick="solveBinMul()">Multiply →</button>
+        </div>
+        <div id="res-bin-mul" class="result-panel"></div>
+      </div>
+      <!-- Binary Div -->
+      <div id="binary-bdiv" class="topic-panel">
+        <div class="input-section">
+          <h4>Binary Division (A ÷ B)</h4>
+          <div class="field-row">
+            <div class="field-group"><label>Dividend (Binary A)</label><input type="text" id="bin-div-a" placeholder="1100"></div>
+            <div class="field-group"><label>Divisor (Binary B)</label><input type="text" id="bin-div-b" placeholder="10"></div>
+          </div>
+          <button class="btn-primary" onclick="solveBinDiv()">Divide →</button>
+        </div>
+        <div id="res-bin-div" class="result-panel"></div>
+      </div>
+      <!-- Dec to Bin -->
+      <div id="binary-d2b" class="topic-panel">
+        <div class="input-section">
+          <h4>Decimal to Binary</h4>
+          <div class="field-row">
+            <div class="field-group"><label>Decimal Number</label><input type="number" id="bin-d2b" placeholder="42" min="0"></div>
+          </div>
+          <button class="btn-primary" onclick="solveDec2Bin()">Convert →</button>
+        </div>
+        <div id="res-bin-d2b" class="result-panel"></div>
+      </div>
+      <!-- Bin to Dec -->
+      <div id="binary-b2d" class="topic-panel">
+        <div class="input-section">
+          <h4>Binary to Decimal</h4>
+          <div class="field-row">
+            <div class="field-group"><label>Binary Number</label><input type="text" id="bin-b2d" placeholder="101010"></div>
+          </div>
+          <button class="btn-primary" onclick="solveBin2Dec()">Convert →</button>
+        </div>
+        <div id="res-bin-b2d" class="result-panel"></div>
+      </div>
+    </div>
+  </div>
 
-  <p class="team">
-    Proudly developed by our team:
-    </p><strong>Mohammed Barzan</strong></p>
-   </p> <strong>Zhalla Karwan</strong></p>
-   </p> <strong>Anas Muhsin</strong></p>
-  </p>
+  <!-- MATRIX -->
+  <div id="solver-matrix" class="solver-section" style="display:none;">
+    <div class="solver-header">
+      <button class="back-btn" onclick="showPage('home')">← Back</button>
+      <h2>Matrix</h2>
+      <div class="subtitle">Specify rows and columns, then enter values</div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('matrix','madd')">Addition</button>
+      <button class="tab-btn" onclick="switchTab('matrix','msub')">Subtraction</button>
+      <button class="tab-btn" onclick="switchTab('matrix','mmul')">Multiply</button>
+      <button class="tab-btn" onclick="switchTab('matrix','mdet')">Determinant</button>
+      <button class="tab-btn" onclick="switchTab('matrix','mtrans')">Transpose</button>
+    </div>
+    <div class="solver-body">
+      <!-- Matrix Add -->
+      <div id="matrix-madd" class="topic-panel active">
+        <div class="input-section">
+          <h4>Matrix Size</h4>
+          <div class="size-row">
+            <div class="field-group"><label>Rows</label><input type="number" id="madd-r" value="2" min="1" max="5" oninput="buildMatrixInputs('madd')"></div>
+            <div class="field-group"><label>Cols</label><input type="number" id="madd-c" value="2" min="1" max="5" oninput="buildMatrixInputs('madd')"></div>
+          </div>
+          <div id="madd-inputs"></div>
+          <button class="btn-primary" onclick="solveMatrixAdd()">Add A + B →</button>
+        </div>
+        <div id="res-matrix-add" class="result-panel"></div>
+      </div>
+      <!-- Matrix Sub -->
+      <div id="matrix-msub" class="topic-panel">
+        <div class="input-section">
+          <h4>Matrix Size</h4>
+          <div class="size-row">
+            <div class="field-group"><label>Rows</label><input type="number" id="msub-r" value="2" min="1" max="5" oninput="buildMatrixInputs('msub')"></div>
+            <div class="field-group"><label>Cols</label><input type="number" id="msub-c" value="2" min="1" max="5" oninput="buildMatrixInputs('msub')"></div>
+          </div>
+          <div id="msub-inputs"></div>
+          <button class="btn-primary" onclick="solveMatrixSub()">Subtract A − B →</button>
+        </div>
+        <div id="res-matrix-sub" class="result-panel"></div>
+      </div>
+      <!-- Matrix Mul -->
+      <div id="matrix-mmul" class="topic-panel">
+        <div class="input-section">
+          <h4>Matrix A (m×n) · Matrix B (n×p)</h4>
+          <div class="size-row">
+            <div class="field-group"><label>A Rows (m)</label><input type="number" id="mmul-m" value="2" min="1" max="4" oninput="buildMatrixMulInputs()"></div>
+            <div class="field-group"><label>A Cols / B Rows (n)</label><input type="number" id="mmul-n" value="2" min="1" max="4" oninput="buildMatrixMulInputs()"></div>
+            <div class="field-group"><label>B Cols (p)</label><input type="number" id="mmul-p" value="2" min="1" max="4" oninput="buildMatrixMulInputs()"></div>
+          </div>
+          <div id="mmul-inputs"></div>
+          <button class="btn-primary" onclick="solveMatrixMul()">Multiply A × B →</button>
+        </div>
+        <div id="res-matrix-mul" class="result-panel"></div>
+      </div>
+      <!-- Determinant -->
+      <div id="matrix-mdet" class="topic-panel">
+        <div class="input-section">
+          <h4>Square Matrix (2×2 or 3×3)</h4>
+          <div class="size-row">
+            <div class="field-group"><label>Size</label>
+              <select id="mdet-size" onchange="buildMatrixDetInputs()">
+                <option value="2">2×2</option>
+                <option value="3">3×3</option>
+              </select>
+            </div>
+          </div>
+          <div id="mdet-inputs"></div>
+          <button class="btn-primary" onclick="solveMatrixDet()">Determinant →</button>
+        </div>
+        <div id="res-matrix-det" class="result-panel"></div>
+      </div>
+      <!-- Transpose -->
+      <div id="matrix-mtrans" class="topic-panel">
+        <div class="input-section">
+          <h4>Matrix Size</h4>
+          <div class="size-row">
+            <div class="field-group"><label>Rows</label><input type="number" id="mtrans-r" value="2" min="1" max="5" oninput="buildMatrixTransInputs()"></div>
+            <div class="field-group"><label>Cols</label><input type="number" id="mtrans-c" value="3" min="1" max="5" oninput="buildMatrixTransInputs()"></div>
+          </div>
+          <div id="mtrans-inputs"></div>
+          <button class="btn-primary" onclick="solveMatrixTrans()">Transpose →</button>
+        </div>
+        <div id="res-matrix-trans" class="result-panel"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRIME -->
+  <div id="solver-prime" class="solver-section" style="display:none;">
+    <div class="solver-header">
+      <button class="back-btn" onclick="showPage('home')">← Back</button>
+      <h2>Prime Numbers</h2>
+      <div class="subtitle">Test primality, list primes, or factorize numbers</div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('prime','ptest')">Primality Test</button>
+      <button class="tab-btn" onclick="switchTab('prime','plist')">List Primes</button>
+      <button class="tab-btn" onclick="switchTab('prime','pfact')">Factorization</button>
+    </div>
+    <div class="solver-body">
+      <!-- Primality Test -->
+      <div id="prime-ptest" class="topic-panel active">
+        <div class="input-section">
+          <h4>Test a Number</h4>
+          <div class="field-row">
+            <div class="field-group"><label>Number</label><input type="number" id="prime-n" placeholder="17" min="2"></div>
+          </div>
+          <button class="btn-primary" onclick="solvePrimeTest()">Test →</button>
+        </div>
+        <div id="res-prime-test" class="result-panel"></div>
+      </div>
+      <!-- List Primes -->
+      <div id="prime-plist" class="topic-panel">
+        <div class="input-section">
+          <h4>List All Primes in Range</h4>
+          <div class="field-row">
+            <div class="field-group"><label>From</label><input type="number" id="prime-from" value="1" min="1"></div>
+            <div class="field-group"><label>To</label><input type="number" id="prime-to" value="50" min="2"></div>
+          </div>
+          <button class="btn-primary" onclick="solvePrimeList()">List →</button>
+        </div>
+        <div id="res-prime-list" class="result-panel"></div>
+      </div>
+      <!-- Factorization -->
+      <div id="prime-pfact" class="topic-panel">
+        <div class="input-section">
+          <h4>Prime Factorization</h4>
+          <div class="field-row">
+            <div class="field-group"><label>Number</label><input type="number" id="prime-fact-n" placeholder="60" min="2"></div>
+          </div>
+          <button class="btn-primary" onclick="solvePrimeFact()">Factorize →</button>
+        </div>
+        <div id="res-prime-fact" class="result-panel"></div>
+      </div>
+    </div>
+  </div>
 </div>
-</section>
 
-<!-- MATRIX -->
-<section id="matrix">
-
-<h2>Matrix 2x2 Operations</h2>
-
-<div class="matrix-container">
-
-<div class="matrix-box">
-<h3>Matrix A</h3>
-<div class="matrix-grid">
-<input id="m1"><input id="m2">
-<input id="m3"><input id="m4">
-</div>
-</div>
-
-
-
-<div class="matrix-box">
-<h3>Matrix B</h3>
-<div class="matrix-grid">
-<input id="m5"><input id="m6">
-<input id="m7"><input id="m8">
-</div>
-</div>
-
-</div>
-
-<div class="matrix-buttons">
-<button onclick="addMatrix()">Add</button>
-<button onclick="subMatrix()">Subtract</button>
-<button onclick="mulMatrix()">Multiply</button>
-</div>
-
-<div id="matrixResult"></div>
-<div id="matrixSubResult"></div>
-<div id="matrixMulResult"></div>
-
-<hr>
-
-<h2>Matrix 3x3 Addition</h2>
-
-<div class="matrix-3-container">
-<input id="m3x3a" placeholder="Matrix A (9 numbers comma)">
-<input id="m3x3b" placeholder="Matrix B (9 numbers comma)">
-</div>
-
-<button onclick="add3x3()">Add 3x3</button>
-<div id="matrix3Result"></div>
-
-</section>
-
-<!-- BINARY -->
-<section id="binary">
-
-<h2>Binary Converter</h2>
-
-<div class="binary-card">
-<h3>Binary → Decimal</h3>
-<input id="binaryInput">
-<button onclick="binaryToDecimal()">Convert</button>
-<div id="binaryResult"></div>
-</div>
-
-<div class="binary-card">
-<h3>Decimal → Binary</h3>
-<input id="decimalInput">
-<button onclick="decimalToBinary()">Convert</button>
-<div id="decimalResult"></div>
-</div>
-
-<div class="binary-card">
-<h3>Binary Operations</h3>
-<input id="bin1" placeholder="Binary 1">
-<input id="bin2" placeholder="Binary 2">
-
-<div class="binary-buttons">
-<button onclick="binaryAdd()">+</button>
-<button onclick="binarySub()">−</button>
-<button onclick="binaryMul()">×</button>
-<button onclick="binaryDiv()">÷</button>
-</div>
-
-<div id="binaryOpResult"></div>
-</div>
-
-</section>
-
-<!-- PRIME -->
-<section id="prime">
-<h2>Prime Factorization</h2>
-<input id="primeInput">
-<button onclick="primeFactor()">Factor</button>
-<div id="primeResult"></div>
-</section>
-
-<!-- CALCULUS -->
-<section id="calculus">
-<h2>Derivative of ax^n</h2>
-<input id="coef" placeholder="a">
-<input id="power" placeholder="n">
-<button onclick="derivative()">Differentiate</button>
-<div id="derivativeResult"></div>
-
-<h2>Integral of ax^n</h2>
-<input id="icoef" placeholder="a">
-<input id="ipower" placeholder="n">
-<button onclick="integral()">Integrate</button>
-<div id="integralResult"></div>
-</section>
-
+<!-- ─── JAVASCRIPT ─── -->
 <script>
-
-function show(id){
-document.querySelectorAll("section").forEach(sec=>sec.classList.remove("active"));
-document.getElementById(id).classList.add("active");
+// ════════════════════════════════════
+// PAGE NAVIGATION
+// ════════════════════════════════════
+function showPage(pg) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  if(pg === 'home') {
+    document.getElementById('page-home').classList.add('active');
+    document.querySelectorAll('.nav-links button').forEach((b,i)=>b.classList.toggle('active',i===0));
+  } else {
+    document.getElementById('page-solver').classList.add('active');
+    document.querySelectorAll('.nav-links button').forEach((b,i)=>b.classList.toggle('active',i===1));
+  }
 }
 
-/* LINEAR */
-function solveLinear(){
-let a1=parseFloat(a1.value);
-let b1=parseFloat(b1.value);
-let c1=parseFloat(c1.value);
-let a2=parseFloat(a2.value);
-let b2=parseFloat(b2.value);
-let c2=parseFloat(c2.value);
-
-let d=a1*b2-a2*b1;
-if(d==0){
-linearResult.innerHTML="No unique solution";
-return;
-}
-let x=(c1*b2-c2*b1)/d;
-let y=(a1*c2-a2*c1)/d;
-
-linearResult.innerHTML=
-"Step1: Determinant="+d+"<br>"+
-"Step2: x="+x+"<br>"+
-"Step3: y="+y;
+function openSolver(subject) {
+  showPage('solver');
+  document.querySelectorAll('.solver-section').forEach(s=>s.style.display='none');
+  document.getElementById('solver-'+subject).style.display='block';
+  if(subject==='matrix') { buildMatrixInputs('madd'); buildMatrixInputs('msub'); buildMatrixMulInputs(); buildMatrixDetInputs(); buildMatrixTransInputs(); }
 }
 
-/* QUADRATIC */
-function solveQuadratic(){
-let a=parseFloat(qa.value);
-let b=parseFloat(qb.value);
-let c=parseFloat(qc.value);
-
-let d=b*b-4*a*c;
-if(d<0){
-quadResult.innerHTML="No Real Roots";
-return;
+function switchTab(subject, panel) {
+  var sec = document.getElementById('solver-'+subject);
+  sec.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  sec.querySelectorAll('.topic-panel').forEach(p=>p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById(subject+'-'+panel).classList.add('active');
 }
 
-let x1=(-b+Math.sqrt(d))/(2*a);
-let x2=(-b-Math.sqrt(d))/(2*a);
-
-quadResult.innerHTML=
-"Step1: Δ="+d+"<br>"+
-"x1="+x1+"<br>"+
-"x2="+x2;
+// ════════════════════════════════════
+// RESULT HELPERS
+// ════════════════════════════════════
+function showResult(id, steps, finalText) {
+  var el = document.getElementById(id);
+  var html = '<div class="result-header"><div class="dot"></div><span>Solution</span></div><div class="steps-container">';
+  steps.forEach(function(s,i){
+    html += '<div class="step" style="animation-delay:'+(i*0.08)+'s">';
+    html += '<div class="step-num">'+(i+1)+'</div>';
+    html += '<div class="step-content"><div class="step-title">'+s.title+'</div><div class="step-body">'+s.body+'</div></div></div>';
+  });
+  if(finalText) html += '<div class="final-answer">✓ Answer: '+finalText+'</div>';
+  html += '</div>';
+  el.innerHTML = html;
+  el.classList.add('show');
 }
 
-/* MATRIX ADD */
-function addMatrix(){
-let r1=parseFloat(m1.value)+parseFloat(m5.value);
-let r2=parseFloat(m2.value)+parseFloat(m6.value);
-let r3=parseFloat(m3.value)+parseFloat(m7.value);
-let r4=parseFloat(m4.value)+parseFloat(m8.value);
-
-matrixResult.innerHTML=
-r1+" "+r2+"<br>"+r3+" "+r4;
+function showError(id, msg) {
+  var el = document.getElementById(id);
+  el.innerHTML = '<div class="steps-container"><div class="error-msg">⚠ '+msg+'</div></div>';
+  el.classList.add('show');
 }
 
-/* BINARY */
-function binaryToDecimal(){
-let bin=binaryInput.value;
-let dec=parseInt(bin,2);
-binaryResult.innerHTML="Decimal="+dec;
+function parseSet(str) {
+  return str.split(',').map(s=>s.trim()).filter(s=>s!=='');
 }
 
-/* PRIME */
-function primeFactor(){
-let n=parseInt(primeInput.value);
-let result="";
-for(let i=2;i<=n;i++){
-while(n%i==0){
-result+=i+" ";
-n/=i;
-}
-}
-primeResult.innerHTML=result;
-}
+function makeSet(arr) { return [...new Set(arr)]; }
+function fmtSet(arr) { return '{'+arr.join(', ')+'}'; }
 
-/* DERIVATIVE */
-function derivative(){
-let a=parseFloat(coef.value);
-let n=parseFloat(power.value);
-
-let newCoef=a*n;
-let newPower=n-1;
-
-derivativeResult.innerHTML=
-"Derivative="+newCoef+"x^"+newPower;
+// ════════════════════════════════════
+// SET THEORY
+// ════════════════════════════════════
+function solveSetUnion() {
+  var a = parseSet(document.getElementById('set-u-a').value);
+  var b = parseSet(document.getElementById('set-u-b').value);
+  if(!a.length||!b.length){showError('res-set-union','Enter values for both sets.');return;}
+  var u = makeSet([...a,...b]);
+  var steps=[
+    {title:'Define Sets',body:'A = <span class="highlight">'+fmtSet(a)+'</span><br>B = <span class="highlight">'+fmtSet(b)+'</span>'},
+    {title:'Combine all elements from A and B',body:'All elements: '+[...a,...b].join(', ')},
+    {title:'Remove duplicates (each element appears once)',body:u.map(function(x){return'<span class="highlight">'+x+'</span>';}).join(', ')+' → unique elements only'},
+    {title:'Final Union Set',body:'A ∪ B = <span class="result-val">'+fmtSet(u)+'</span>'}
+  ];
+  showResult('res-set-union',steps,'A ∪ B = '+fmtSet(u));
 }
 
-/* INTEGRAL */
-function integral(){
-let a=parseFloat(icoef.value);
-let n=parseFloat(ipower.value);
-
-let newPower=n+1;
-let newCoef=a/(n+1);
-
-integralResult.innerHTML=
-"Integral="+newCoef+"x^"+newPower+" + C";
-}
-/* MATRIX SUB */
-function subMatrix(){
-let r1=parseFloat(m1.value)-parseFloat(m5.value);
-let r2=parseFloat(m2.value)-parseFloat(m6.value);
-let r3=parseFloat(m3.value)-parseFloat(m7.value);
-let r4=parseFloat(m4.value)-parseFloat(m8.value);
-
-matrixSubResult.innerHTML=
-r1+" "+r2+"<br>"+r3+" "+r4;
+function solveSetInter() {
+  var a = parseSet(document.getElementById('set-i-a').value);
+  var b = parseSet(document.getElementById('set-i-b').value);
+  if(!a.length||!b.length){showError('res-set-inter','Enter values for both sets.');return;}
+  var inter = a.filter(x=>b.includes(x));
+  var steps=[
+    {title:'Define Sets',body:'A = <span class="highlight">'+fmtSet(a)+'</span><br>B = <span class="highlight">'+fmtSet(b)+'</span>'},
+    {title:'Check each element of A — is it in B?',body:a.map(x=>'<span class="highlight">'+x+'</span> ∈ B? <span class="'+(b.includes(x)?'result-val':'op')+'">'+(b.includes(x)?'Yes ✓':'No ✗')+'</span>').join('<br>')},
+    {title:'Collect matching elements',body:inter.length?inter.map(x=>'<span class="result-val">'+x+'</span>').join(', '):'<span class="op">No common elements</span>'},
+  ];
+  showResult('res-set-inter',steps,'A ∩ B = '+fmtSet(inter));
 }
 
-/* MATRIX MUL */
-function mulMatrix(){
-let a=m1.value,b=m2.value,c=m3.value,d=m4.value;
-let e=m5.value,f=m6.value,g=m7.value,h=m8.value;
-
-let r1=a*e+b*g;
-let r2=a*f+b*h;
-let r3=c*e+d*g;
-let r4=c*f+d*h;
-
-matrixMulResult.innerHTML=
-r1+" "+r2+"<br>"+r3+" "+r4;
+function solveSetDiff() {
+  var a = parseSet(document.getElementById('set-d-a').value);
+  var b = parseSet(document.getElementById('set-d-b').value);
+  if(!a.length||!b.length){showError('res-set-diff','Enter values for both sets.');return;}
+  var diff = a.filter(x=>!b.includes(x));
+  var steps=[
+    {title:'Define Sets',body:'A = <span class="highlight">'+fmtSet(a)+'</span><br>B = <span class="highlight">'+fmtSet(b)+'</span>'},
+    {title:'A − B means: elements in A but NOT in B',body:a.map(x=>'<span class="highlight">'+x+'</span> in B? <span class="'+(!b.includes(x)?'result-val':'op')+'">'+(!b.includes(x)?'Not in B → Keep ✓':'In B → Remove ✗')+'</span>').join('<br>')},
+    {title:'Result',body:diff.length?diff.map(x=>'<span class="result-val">'+x+'</span>').join(', '):'∅ (empty set)'},
+  ];
+  showResult('res-set-diff',steps,'A − B = '+fmtSet(diff));
 }
 
-/* MATRIX 3x3 ADD */
-function add3x3(){
-let A=m3x3a.value.split(",");
-let B=m3x3b.value.split(",");
-let result="";
-for(let i=0;i<9;i++){
-result+= (parseFloat(A[i])+parseFloat(B[i]))+" ";
-if((i+1)%3==0) result+="<br>";
-}
-matrix3Result.innerHTML=result;
-}
-
-/* DECIMAL TO BINARY */
-function decimalToBinary(){
-let dec=parseInt(decimalInput.value);
-decimalResult.innerHTML="Binary="+dec.toString(2);
+function solveSetComp() {
+  var u = parseSet(document.getElementById('set-c-u').value);
+  var a = parseSet(document.getElementById('set-c-a').value);
+  if(!u.length||!a.length){showError('res-set-comp','Enter both sets.');return;}
+  var notInU = a.filter(x=>!u.includes(x));
+  if(notInU.length){showError('res-set-comp','A must be a subset of U. Elements not in U: '+notInU.join(', '));return;}
+  var comp = u.filter(x=>!a.includes(x));
+  var steps=[
+    {title:'Universal Set U',body:'U = <span class="highlight">'+fmtSet(u)+'</span>'},
+    {title:'Set A',body:'A = <span class="highlight">'+fmtSet(a)+'</span>'},
+    {title:"A' = Elements in U that are NOT in A",body:u.map(x=>'<span class="highlight">'+x+'</span> in A? <span class="'+(!a.includes(x)?'result-val':'op')+'">'+(!a.includes(x)?'Not in A → Include ✓':'In A → Exclude ✗')+'</span>').join('<br>')},
+  ];
+  showResult('res-set-comp',steps,"A' = "+fmtSet(comp));
 }
 
-/* BINARY ADD */
-function binaryAdd(){
-let r=(parseInt(bin1.value,2)+parseInt(bin2.value,2)).toString(2);
-binaryOpResult.innerHTML=r;
+function solveSubset() {
+  var a = parseSet(document.getElementById('set-s-a').value);
+  var b = parseSet(document.getElementById('set-s-b').value);
+  if(!a.length||!b.length){showError('res-set-subset','Enter values for both sets.');return;}
+  var isSub = a.every(x=>b.includes(x));
+  var steps=[
+    {title:'Define Sets',body:'A = <span class="highlight">'+fmtSet(a)+'</span><br>B = <span class="highlight">'+fmtSet(b)+'</span>'},
+    {title:'A ⊆ B means: every element of A must be in B',body:a.map(x=>'<span class="highlight">'+x+'</span> ∈ B? <span class="'+(b.includes(x)?'result-val':'op')+'">'+(b.includes(x)?'Yes ✓':'No ✗ — NOT a subset')+'</span>').join('<br>')},
+    {title:'Conclusion',body:isSub?'<span class="result-val">A ⊆ B is TRUE — All elements of A are in B</span>':'<span class="op">A ⊆ B is FALSE — Not all elements of A are in B</span>'},
+  ];
+  showResult('res-set-subset',steps,isSub?'A ⊆ B → TRUE':'A ⊆ B → FALSE');
 }
 
-/* BINARY SUB */
-function binarySub(){
-let r=(parseInt(bin1.value,2)-parseInt(bin2.value,2)).toString(2);
-binaryOpResult.innerHTML=r;
+// ════════════════════════════════════
+// LOGIC
+// ════════════════════════════════════
+function evalExpr(expr, p, q) {
+  var e = expr.toUpperCase()
+    .replace(/\bP\b/g, p ? 'true' : 'false')
+    .replace(/\bQ\b/g, q ? 'true' : 'false')
+    .replace(/\bAND\b/g, '&&')
+    .replace(/\bOR\b/g, '||')
+    .replace(/\bNOT\b/g, '!')
+    .replace(/\bXOR\b/g, '!==')
+    .replace(/\bIMPLIES\b/g, '|| !');
+  // Fix IMPLIES: "P IMPLIES Q" = "!P || Q"
+  // Already done above as a basic replacement
+  try { return eval(e); } catch(err) { return null; }
 }
 
-/* BINARY MUL */
-function binaryMul(){
-let r=(parseInt(bin1.value,2)*parseInt(bin2.value,2)).toString(2);
-binaryOpResult.innerHTML=r;
+function evalExprFull(expr, p, q) {
+  // More robust IMPLIES handling
+  var e = expr.toUpperCase()
+    .replace(/\bIMPLIES\b/g,'IMPLIES');
+  // handle IMPLIES: A IMPLIES B = (!A || B)
+  // simple left-to-right
+  e = e.replace(/\(([^)]+)\)\s*IMPLIES\s*\(([^)]+)\)/g, function(m,a,b){return'(!('+ a +')||('+ b +'))';});
+  e = e.replace(/(\w+)\s*IMPLIES\s*(\w+)/g, function(m,a,b){return'(!('+a+')||('+b+'))';});
+  e = e.replace(/\bP\b/g, p?'true':'false')
+       .replace(/\bQ\b/g, q?'true':'false')
+       .replace(/\bAND\b/g,'&&')
+       .replace(/\bOR\b/g,'||')
+       .replace(/\bNOT\b/g,'!')
+       .replace(/\bXOR\b/g,'!==');
+  try { return eval(e); } catch(err){ return null; }
 }
 
-/* BINARY DIV */
-function binaryDiv(){
-let r=(parseInt(bin1.value,2)/parseInt(bin2.value,2)).toString(2);
-binaryOpResult.innerHTML=r;
+function solveLogic() {
+  var p = document.getElementById('logic-p').value === 'true';
+  var q = document.getElementById('logic-q').value === 'true';
+  var expr = document.getElementById('logic-expr').value.trim();
+  if(!expr){showError('res-logic-eval','Enter an expression.');return;}
+  var result = evalExprFull(expr, p, q);
+  if(result===null){showError('res-logic-eval','Invalid expression. Use P, Q, AND, OR, NOT, IMPLIES, XOR.');return;}
+  var steps=[
+    {title:'Given Values',body:'P = <span class="highlight">'+(p?'True':'False')+'</span> &nbsp;&nbsp; Q = <span class="highlight">'+(q?'True':'False')+'</span>'},
+    {title:'Expression',body:'<span class="highlight">'+expr+'</span>'},
+    {title:'Substitute values',body:expr.toUpperCase().replace(/\bP\b/g,'<span class="op">'+(p?'T':'F')+'</span>').replace(/\bQ\b/g,'<span class="op">'+(q?'T':'F')+'</span>')},
+    {title:'Evaluate',body:'Result = <span class="result-val">'+(result?'True':'False')+'</span>'},
+  ];
+  showResult('res-logic-eval',steps,(result?'TRUE':'FALSE'));
 }
 
+function solveTruthTable() {
+  var expr = document.getElementById('logic-tt-expr').value.trim();
+  if(!expr){showError('res-logic-truth','Enter an expression.');return;}
+  var combos=[[true,true],[true,false],[false,true],[false,false]];
+  var rows=combos.map(function(c){
+    var r=evalExprFull(expr,c[0],c[1]);
+    return {p:c[0],q:c[1],r:r};
+  });
+  var tbl='<table style="border-collapse:collapse;font-family:JetBrains Mono,monospace;font-size:0.88rem;width:100%;">';
+  tbl+='<thead><tr style="background:rgba(108,99,255,0.15);">';
+  tbl+='<th style="padding:10px 16px;text-align:left;border:1px solid #2a2a3a;color:#6c63ff;">P</th>';
+  tbl+='<th style="padding:10px 16px;text-align:left;border:1px solid #2a2a3a;color:#6c63ff;">Q</th>';
+  tbl+='<th style="padding:10px 16px;text-align:left;border:1px solid #2a2a3a;color:#f9ca24;">'+expr+'</th>';
+  tbl+='</tr></thead><tbody>';
+  rows.forEach(function(row,i){
+    var bg=i%2===0?'rgba(255,255,255,0.02)':'transparent';
+    tbl+='<tr style="background:'+bg+'">';
+    tbl+='<td style="padding:9px 16px;border:1px solid #2a2a3a;color:'+(row.p?'#43e97b':'#ff6b6b')+'">'+(row.p?'T':'F')+'</td>';
+    tbl+='<td style="padding:9px 16px;border:1px solid #2a2a3a;color:'+(row.q?'#43e97b':'#ff6b6b')+'">'+(row.q?'T':'F')+'</td>';
+    tbl+='<td style="padding:9px 16px;border:1px solid #2a2a3a;color:'+(row.r?'#43e97b':'#ff6b6b');
+    tbl+=';font-weight:700;">'+(row.r===null?'ERR':row.r?'T':'F')+'</td>';
+    tbl+='</tr>';
+  });
+  tbl+='</tbody></table>';
+  var el=document.getElementById('res-logic-truth');
+  el.innerHTML='<div class="result-header"><div class="dot"></div><span>Truth Table</span></div><div class="steps-container">'+tbl+'</div>';
+  el.classList.add('show');
+}
 
+// ════════════════════════════════════
+// BINARY
+// ════════════════════════════════════
+function isBin(s){return /^[01]+$/.test(s.trim());}
+
+function solveBinAdd() {
+  var a=document.getElementById('bin-add-a').value.trim();
+  var b=document.getElementById('bin-add-b').value.trim();
+  if(!isBin(a)||!isBin(b)){showError('res-bin-add','Enter valid binary numbers (0s and 1s only).');return;}
+  var da=parseInt(a,2), db=parseInt(b,2), dr=da+db;
+  var rb=dr.toString(2);
+  var steps=[
+    {title:'Convert to Decimal (to verify)',body:'<span class="highlight">'+a+'</span>₂ = <span class="op">'+da+'</span>₁₀ &nbsp;&nbsp; <span class="highlight">'+b+'</span>₂ = <span class="op">'+db+'</span>₁₀'},
+    {title:'Binary Column Addition (right to left)',body:binAddSteps(a,b)},
+    {title:'Result in Binary',body:'Sum = <span class="result-val">'+rb+'</span>₂'},
+    {title:'Verify in Decimal',body:da+' + '+db+' = <span class="result-val">'+dr+'</span>'},
+  ];
+  showResult('res-bin-add',steps,rb+'₂ = '+dr+'₁₀');
+}
+
+function binAddSteps(a,b) {
+  var maxl=Math.max(a.length,b.length)+1;
+  a=a.padStart(maxl,'0'); b=b.padStart(maxl,'0');
+  var carry=0, result='', log='';
+  for(var i=maxl-1;i>=0;i--) {
+    var ba=parseInt(a[i]), bb=parseInt(b[i]);
+    var s=ba+bb+carry;
+    var bit=s%2; carry=Math.floor(s/2);
+    result=bit+result;
+    log+='Col '+(maxl-i)+': '+ba+' + '+bb+' + carry('+carry_prev(carry,s)+')'
+       +' = <span class="highlight">'+s+'</span> → bit=<span class="result-val">'+bit+'</span>, carry=<span class="op">'+carry+'</span><br>';
+  }
+  return log;
+}
+
+function carry_prev(c,s){ return s===0?0:(s===1&&c===0)?0:(s===2&&c===1)?1:(s>=2)?1:0; }
+
+function solveBinSub() {
+  var a=document.getElementById('bin-sub-a').value.trim();
+  var b=document.getElementById('bin-sub-b').value.trim();
+  if(!isBin(a)||!isBin(b)){showError('res-bin-sub','Enter valid binary numbers.');return;}
+  var da=parseInt(a,2), db=parseInt(b,2);
+  if(db>da){showError('res-bin-sub','A must be ≥ B for simple binary subtraction.');return;}
+  var dr=da-db; var rb=dr.toString(2);
+  var twos=twosComp(b, Math.max(a.length,b.length)+1);
+  var steps=[
+    {title:'Given',body:'A = <span class="highlight">'+a+'</span>₂ ('+da+'₁₀) &nbsp; B = <span class="highlight">'+b+'</span>₂ ('+db+'₁₀)'},
+    {title:"Method: 2's Complement of B",body:"1's complement of B = <span class='op'>"+onesComp(b,Math.max(a.length,b.length)+1)+"</span><br>Add 1 → 2's complement = <span class='highlight'>"+twos+'</span>'},
+    {title:'Add A + 2\'s Complement of B',body:'<span class="highlight">'+a.padStart(Math.max(a.length,b.length)+1,'0')+'</span><br>+ <span class="op">'+twos+'</span>'},
+    {title:'Result (ignore overflow carry bit)',body:'Binary result = <span class="result-val">'+rb+'</span>₂'},
+    {title:'Decimal Verification',body:da+' − '+db+' = <span class="result-val">'+dr+'</span>₁₀'},
+  ];
+  showResult('res-bin-sub',steps,rb+'₂ = '+dr+'₁₀');
+}
+
+function onesComp(b,len){
+  b=b.padStart(len,'0');
+  return b.split('').map(x=>x==='0'?'1':'0').join('');
+}
+
+function twosComp(b,len){
+  var oc=onesComp(b,len);
+  var n=parseInt(oc,2)+1;
+  return n.toString(2).padStart(len,'0');
+}
+
+function solveBinMul() {
+  var a=document.getElementById('bin-mul-a').value.trim();
+  var b=document.getElementById('bin-mul-b').value.trim();
+  if(!isBin(a)||!isBin(b)){showError('res-bin-mul','Enter valid binary numbers.');return;}
+  var da=parseInt(a,2), db=parseInt(b,2), dr=da*db;
+  var rb=dr.toString(2);
+  var partials=[];
+  for(var i=b.length-1;i>=0;i--){
+    var shift=b.length-1-i;
+    var p=b[i]==='1'?a.padEnd(a.length+shift,'0').padStart(a.length+b.length,'0'):'0'.padStart(a.length+b.length,'0');
+    partials.push({bit:b[i],shift:shift,val:p});
+  }
+  var steps=[
+    {title:'Given',body:'A = <span class="highlight">'+a+'</span>₂ ('+da+'₁₀) &nbsp; B = <span class="highlight">'+b+'</span>₂ ('+db+'₁₀)'},
+    {title:'Partial Products (multiply A by each bit of B)',body:partials.map(function(p){
+      return 'Bit=<span class="op">'+p.bit+'</span>, shift='+p.shift+' → <span class="highlight">'+p.val+'</span>';
+    }).join('<br>')},
+    {title:'Sum all partial products',body:'Final sum → <span class="result-val">'+rb+'</span>₂'},
+    {title:'Decimal Verification',body:da+' × '+db+' = <span class="result-val">'+dr+'</span>₁₀'},
+  ];
+  showResult('res-bin-mul',steps,rb+'₂ = '+dr+'₁₀');
+}
+
+function solveBinDiv() {
+  var a=document.getElementById('bin-div-a').value.trim();
+  var b=document.getElementById('bin-div-b').value.trim();
+  if(!isBin(a)||!isBin(b)){showError('res-bin-div','Enter valid binary numbers.');return;}
+  var da=parseInt(a,2), db=parseInt(b,2);
+  if(db===0){showError('res-bin-div','Cannot divide by zero.');return;}
+  var dq=Math.floor(da/db), dr=da%db;
+  var steps=[
+    {title:'Given',body:'Dividend A = <span class="highlight">'+a+'</span>₂ ('+da+'₁₀)<br>Divisor B = <span class="highlight">'+b+'</span>₂ ('+db+'₁₀)'},
+    {title:'Convert to Decimal and Divide',body:da+' ÷ '+db+' = <span class="result-val">'+dq+'</span> remainder <span class="op">'+dr+'</span>'},
+    {title:'Convert Quotient to Binary',body:'Quotient = <span class="result-val">'+dq.toString(2)+'</span>₂'},
+    {title:'Convert Remainder to Binary',body:'Remainder = <span class="op">'+dr.toString(2)+'</span>₂ ('+dr+'₁₀)'},
+    {title:'Final Answer',body:'<span class="highlight">'+a+'</span>₂ ÷ <span class="highlight">'+b+'</span>₂ = <span class="result-val">'+dq.toString(2)+'</span>₂ rem <span class="op">'+dr.toString(2)+'</span>₂'},
+  ];
+  showResult('res-bin-div',steps,dq.toString(2)+'₂ remainder '+dr.toString(2)+'₂');
+}
+
+function solveDec2Bin() {
+  var n=parseInt(document.getElementById('bin-d2b').value);
+  if(isNaN(n)||n<0){showError('res-bin-d2b','Enter a non-negative integer.');return;}
+  if(n===0){showResult('res-bin-d2b',[{title:'Special Case',body:'0 in binary = <span class="result-val">0</span>'}],'0₂');return;}
+  var steps2=[];
+  var orig=n; var bits=[];
+  while(n>0){
+    var rem=n%2;
+    steps2.push({title:'Divide '+n+' by 2',body:n+' ÷ 2 = <span class="highlight">'+Math.floor(n/2)+'</span> remainder <span class="result-val">'+rem+'</span>'});
+    bits.push(rem); n=Math.floor(n/2);
+  }
+  var bin=bits.reverse().join('');
+  steps2.push({title:'Read remainders from bottom to top',body:'Bits: <span class="result-val">'+bin+'</span>₂'});
+  steps2.push({title:'Verification',body:'<span class="result-val">'+bin+'</span>₂ = '+parseInt(bin,2)+'₁₀ ✓'});
+  showResult('res-bin-d2b',steps2,bin+'₂');
+}
+
+function solveBin2Dec() {
+  var b=document.getElementById('bin-b2d').value.trim();
+  if(!isBin(b)){showError('res-bin-b2d','Enter a valid binary number.');return;}
+  var posSteps='';
+  var total=0;
+  for(var i=0;i<b.length;i++){
+    var pos=b.length-1-i;
+    var bit=parseInt(b[i]);
+    var val=bit*Math.pow(2,pos);
+    total+=val;
+    posSteps+=b[i]+' × 2<sup>'+pos+'</sup> = <span class="highlight">'+val+'</span><br>';
+  }
+  var steps=[
+    {title:'Binary Number',body:'<span class="highlight">'+b+'</span>₂ has '+b.length+' bits'},
+    {title:'Expand by positional value (rightmost = position 0)',body:posSteps},
+    {title:'Sum all values',body:'Total = <span class="result-val">'+total+'</span>₁₀'},
+  ];
+  showResult('res-bin-b2d',steps,total+'₁₀');
+}
+
+// ════════════════════════════════════
+// MATRIX BUILDERS
+// ════════════════════════════════════
+function buildMatrixInputs(prefix) {
+  var r=parseInt(document.getElementById(prefix+'-r').value)||2;
+  var c=parseInt(document.getElementById(prefix+'-c').value)||2;
+  var html='';
+  ['A','B'].forEach(function(mat){
+    html+='<p class="matrix-label">Matrix '+mat+'</p>';
+    html+='<div class="matrix-grid" style="grid-template-columns:repeat('+c+',72px);">';
+    for(var i=0;i<r;i++) for(var j=0;j<c;j++)
+      html+='<input type="number" id="'+prefix+'-'+mat+'-'+i+'-'+j+'" value="0">';
+    html+='</div>';
+  });
+  document.getElementById(prefix+'-inputs').innerHTML=html;
+}
+
+function buildMatrixMulInputs() {
+  var m=parseInt(document.getElementById('mmul-m').value)||2;
+  var n=parseInt(document.getElementById('mmul-n').value)||2;
+  var p=parseInt(document.getElementById('mmul-p').value)||2;
+  var html='';
+  html+='<p class="matrix-label">Matrix A ('+m+'×'+n+')</p>';
+  html+='<div class="matrix-grid" style="grid-template-columns:repeat('+n+',72px);">';
+  for(var i=0;i<m;i++) for(var j=0;j<n;j++)
+    html+='<input type="number" id="mmul-A-'+i+'-'+j+'" value="0">';
+  html+='</div>';
+  html+='<p class="matrix-label">Matrix B ('+n+'×'+p+')</p>';
+  html+='<div class="matrix-grid" style="grid-template-columns:repeat('+p+',72px);">';
+  for(var i=0;i<n;i++) for(var j=0;j<p;j++)
+    html+='<input type="number" id="mmul-B-'+i+'-'+j+'" value="0">';
+  html+='</div>';
+  document.getElementById('mmul-inputs').innerHTML=html;
+}
+
+function buildMatrixDetInputs() {
+  var s=parseInt(document.getElementById('mdet-size').value)||2;
+  var html='<p class="matrix-label">Matrix A ('+s+'×'+s+')</p>';
+  html+='<div class="matrix-grid" style="grid-template-columns:repeat('+s+',72px);">';
+  for(var i=0;i<s;i++) for(var j=0;j<s;j++)
+    html+='<input type="number" id="mdet-A-'+i+'-'+j+'" value="0">';
+  html+='</div>';
+  document.getElementById('mdet-inputs').innerHTML=html;
+}
+
+function buildMatrixTransInputs() {
+  var r=parseInt(document.getElementById('mtrans-r').value)||2;
+  var c=parseInt(document.getElementById('mtrans-c').value)||3;
+  var html='<p class="matrix-label">Matrix A ('+r+'×'+c+')</p>';
+  html+='<div class="matrix-grid" style="grid-template-columns:repeat('+c+',72px);">';
+  for(var i=0;i<r;i++) for(var j=0;j<c;j++)
+    html+='<input type="number" id="mtrans-A-'+i+'-'+j+'" value="0">';
+  html+='</div>';
+  document.getElementById('mtrans-inputs').innerHTML=html;
+}
+
+function readMatrix(prefix, mat, rows, cols) {
+  var m=[];
+  for(var i=0;i<rows;i++){
+    var row=[];
+    for(var j=0;j<cols;j++)
+      row.push(parseFloat(document.getElementById(prefix+'-'+mat+'-'+i+'-'+j).value)||0);
+    m.push(row);
+  }
+  return m;
+}
+
+function fmtMatrix(m) {
+  var html='<div class="matrix-display">';
+  m.forEach(function(row){
+    html+='<div class="mrow">'+row.map(function(v){return'<span class="mcell">'+v+'</span>';}).join('')+'</div>';
+  });
+  return html+'</div>';
+}
+
+// ════════════════════════════════════
+// MATRIX SOLVERS
+// ════════════════════════════════════
+function solveMatrixAdd() {
+  var r=parseInt(document.getElementById('madd-r').value)||2;
+  var c=parseInt(document.getElementById('madd-c').value)||2;
+  var A=readMatrix('madd','A',r,c), B=readMatrix('madd','B',r,c);
+  var C=A.map(function(row,i){return row.map(function(v,j){return v+B[i][j];});});
+  var detailSteps='';
+  C.forEach(function(row,i){row.forEach(function(v,j){
+    detailSteps+='C['+i+']['+j+'] = '+A[i][j]+' + '+B[i][j]+' = <span class="result-val">'+v+'</span><br>';
+  });});
+  var steps=[
+    {title:'Matrix A',body:fmtMatrix(A)},
+    {title:'Matrix B',body:fmtMatrix(B)},
+    {title:'Element-by-element addition',body:detailSteps},
+    {title:'Result C = A + B',body:fmtMatrix(C)},
+  ];
+  showResult('res-matrix-add',steps,'See result matrix above');
+}
+
+function solveMatrixSub() {
+  var r=parseInt(document.getElementById('msub-r').value)||2;
+  var c=parseInt(document.getElementById('msub-c').value)||2;
+  var A=readMatrix('msub','A',r,c), B=readMatrix('msub','B',r,c);
+  var C=A.map(function(row,i){return row.map(function(v,j){return v-B[i][j];});});
+  var detailSteps='';
+  C.forEach(function(row,i){row.forEach(function(v,j){
+    detailSteps+='C['+i+']['+j+'] = '+A[i][j]+' − '+B[i][j]+' = <span class="result-val">'+v+'</span><br>';
+  });});
+  var steps=[
+    {title:'Matrix A',body:fmtMatrix(A)},
+    {title:'Matrix B',body:fmtMatrix(B)},
+    {title:'Element-by-element subtraction',body:detailSteps},
+    {title:'Result C = A − B',body:fmtMatrix(C)},
+  ];
+  showResult('res-matrix-sub',steps,'See result matrix above');
+}
+
+function solveMatrixMul() {
+  var m=parseInt(document.getElementById('mmul-m').value)||2;
+  var n=parseInt(document.getElementById('mmul-n').value)||2;
+  var p=parseInt(document.getElementById('mmul-p').value)||2;
+  var A=readMatrix('mmul','A',m,n), B=readMatrix('mmul','B',n,p);
+  var C=[];
+  var detailSteps='';
+  for(var i=0;i<m;i++){
+    C.push([]);
+    for(var j=0;j<p;j++){
+      var sum=0;
+      var parts=[];
+      for(var k=0;k<n;k++){parts.push(A[i][k]+'×'+B[k][j]);sum+=A[i][k]*B[k][j];}
+      C[i].push(sum);
+      detailSteps+='C['+i+']['+j+'] = '+parts.join(' + ')+' = <span class="result-val">'+sum+'</span><br>';
+    }
+  }
+  var steps=[
+    {title:'Matrix A ('+m+'×'+n+')',body:fmtMatrix(A)},
+    {title:'Matrix B ('+n+'×'+p+')',body:fmtMatrix(B)},
+    {title:'Dot product for each cell of C',body:detailSteps},
+    {title:'Result C = A × B ('+m+'×'+p+')',body:fmtMatrix(C)},
+  ];
+  showResult('res-matrix-mul',steps,'See result matrix above');
+}
+
+function solveMatrixDet() {
+  var s=parseInt(document.getElementById('mdet-size').value)||2;
+  var A=readMatrix('mdet','A',s,s);
+  if(s===2){
+    var d=A[0][0]*A[1][1]-A[0][1]*A[1][0];
+    var steps=[
+      {title:'Matrix A (2×2)',body:fmtMatrix(A)},
+      {title:'Formula: det(A) = a·d − b·c',body:'a='+A[0][0]+', b='+A[0][1]+', c='+A[1][0]+', d='+A[1][1]},
+      {title:'Calculate',body:A[0][0]+' × '+A[1][1]+' − '+A[0][1]+' × '+A[1][0]+' = '+A[0][0]*A[1][1]+' − '+A[0][1]*A[1][0]+' = <span class="result-val">'+d+'</span>'},
+    ];
+    showResult('res-matrix-det',steps,'det(A) = '+d);
+  } else {
+    // 3x3 cofactor expansion along first row
+    var a=A,d3=
+      a[0][0]*(a[1][1]*a[2][2]-a[1][2]*a[2][1])-
+      a[0][1]*(a[1][0]*a[2][2]-a[1][2]*a[2][0])+
+      a[0][2]*(a[1][0]*a[2][1]-a[1][1]*a[2][0]);
+    var m00=a[1][1]*a[2][2]-a[1][2]*a[2][1];
+    var m01=a[1][0]*a[2][2]-a[1][2]*a[2][0];
+    var m02=a[1][0]*a[2][1]-a[1][1]*a[2][0];
+    var steps=[
+      {title:'Matrix A (3×3)',body:fmtMatrix(A)},
+      {title:'Cofactor Expansion along Row 1',body:'det = a₀₀·M₀₀ − a₀₁·M₀₁ + a₀₂·M₀₂'},
+      {title:'Minor M₀₀',body:'|'+a[1][1]+' '+a[1][2]+'|<br>|'+a[2][1]+' '+a[2][2]+'| = '+a[1][1]+'×'+a[2][2]+' − '+a[1][2]+'×'+a[2][1]+' = <span class="highlight">'+m00+'</span>'},
+      {title:'Minor M₀₁',body:'|'+a[1][0]+' '+a[1][2]+'|<br>|'+a[2][0]+' '+a[2][2]+'| = '+a[1][0]+'×'+a[2][2]+' − '+a[1][2]+'×'+a[2][0]+' = <span class="highlight">'+m01+'</span>'},
+      {title:'Minor M₀₂',body:'|'+a[1][0]+' '+a[1][1]+'|<br>|'+a[2][0]+' '+a[2][1]+'| = '+a[1][0]+'×'+a[2][1]+' − '+a[1][1]+'×'+a[2][0]+' = <span class="highlight">'+m02+'</span>'},
+      {title:'Final Calculation',body:a[0][0]+'×'+m00+' − '+a[0][1]+'×'+m01+' + '+a[0][2]+'×'+m02+' = <span class="result-val">'+d3+'</span>'},
+    ];
+    showResult('res-matrix-det',steps,'det(A) = '+d3);
+  }
+}
+
+function solveMatrixTrans() {
+  var r=parseInt(document.getElementById('mtrans-r').value)||2;
+  var c=parseInt(document.getElementById('mtrans-c').value)||3;
+  var A=readMatrix('mtrans','A',r,c);
+  var T=[];
+  for(var j=0;j<c;j++){T.push([]);for(var i=0;i<r;i++)T[j].push(A[i][j]);}
+  var detailSteps='';
+  for(var i=0;i<r;i++) for(var j=0;j<c;j++)
+    detailSteps+='A['+i+']['+j+'] → T['+j+']['+i+'] = <span class="result-val">'+A[i][j]+'</span><br>';
+  var steps=[
+    {title:'Original Matrix A ('+r+'×'+c+')',body:fmtMatrix(A)},
+    {title:'Transposing: swap row and column indices',body:detailSteps},
+    {title:'Transposed Matrix Aᵀ ('+c+'×'+r+')',body:fmtMatrix(T)},
+  ];
+  showResult('res-matrix-trans',steps,'See transposed matrix above');
+}
+
+// ════════════════════════════════════
+// PRIME
+// ════════════════════════════════════
+function isPrime(n) {
+  if(n<2) return false;
+  if(n===2) return true;
+  if(n%2===0) return false;
+  for(var i=3;i<=Math.sqrt(n);i+=2) if(n%i===0) return false;
+  return true;
+}
+
+function solvePrimeTest() {
+  var n=parseInt(document.getElementById('prime-n').value);
+  if(isNaN(n)||n<2){showError('res-prime-test','Enter an integer ≥ 2.');return;}
+  var prime=isPrime(n);
+  var sq=Math.floor(Math.sqrt(n));
+  var divisors=[];
+  for(var i=2;i<=sq;i++) if(n%i===0){divisors.push(i); break;}
+  var checkLog='';
+  for(var i=2;i<=sq;i++){
+    checkLog+=n+' ÷ '+i+' = '+n/i+' → remainder <span class="'+(n%i===0?'op':'highlight')+'">'+n%i+'</span>'+(n%i===0?' ← divisor found!':'')+' <br>';
+    if(n%i===0) break;
+  }
+  var steps=[
+    {title:'Number to test',body:'n = <span class="highlight">'+n+'</span>'},
+    {title:'Rule: A prime has no divisors except 1 and itself',body:'We only need to check up to √'+n+' = <span class="highlight">'+sq+'</span>'},
+    {title:'Test divisibility from 2 to √n',body:checkLog||'No divisors found up to √n'},
+    {title:'Conclusion',body:prime?'<span class="result-val">'+n+' IS a prime number ✓</span>':'<span class="op">'+n+' is NOT prime — divisible by '+divisors[0]+'</span>'},
+  ];
+  showResult('res-prime-test',steps,prime?n+' is PRIME':n+' is NOT prime');
+}
+
+function solvePrimeList() {
+  var from=parseInt(document.getElementById('prime-from').value)||1;
+  var to=parseInt(document.getElementById('prime-to').value)||50;
+  if(to-from>500){showError('res-prime-list','Range too large (max 500).');return;}
+  if(to<from){showError('res-prime-list','"To" must be greater than "From".');return;}
+  var primes=[], nonprimes=[];
+  for(var i=from;i<=to;i++) (isPrime(i)?primes:nonprimes).push(i);
+  var el=document.getElementById('res-prime-list');
+  var html='<div class="result-header"><div class="dot"></div><span>Primes from '+from+' to '+to+'</span></div>';
+  html+='<div class="steps-container">';
+  html+='<div class="step-content" style="margin-bottom:16px;"><div class="step-title">Found '+primes.length+' prime number(s)</div>';
+  html+='<div class="prime-grid">'+primes.map(function(p){return'<span class="prime-chip">'+p+'</span>';}).join('')+'</div></div>';
+  html+='</div>';
+  el.innerHTML=html; el.classList.add('show');
+}
+
+function solvePrimeFact() {
+  var n=parseInt(document.getElementById('prime-fact-n').value);
+  if(isNaN(n)||n<2){showError('res-prime-fact','Enter an integer ≥ 2.');return;}
+  var orig=n, factors=[], log='';
+  var d=2;
+  while(n>1){
+    while(n%d===0){
+      log+=n+' ÷ '+d+' = <span class="highlight">'+n/d+'</span> &nbsp;(factor: <span class="result-val">'+d+'</span>)<br>';
+      factors.push(d); n=n/d;
+    }
+    d++;
+  }
+  var expr=factors.join(' × ');
+  var steps=[
+    {title:'Number',body:'n = <span class="highlight">'+orig+'</span>'},
+    {title:'Divide by smallest prime factor repeatedly',body:log},
+    {title:'Prime Factorization',body:'<span class="result-val">'+orig+'</span> = <span class="highlight">'+expr+'</span>'},
+  ];
+  showResult('res-prime-fact',steps,orig+' = '+expr);
+}
+
+// ════════════════════════════════════
+// INIT
+// ════════════════════════════════════
+window.onload = function() {
+  buildMatrixInputs('madd');
+  buildMatrixInputs('msub');
+  buildMatrixMulInputs();
+  buildMatrixDetInputs();
+  buildMatrixTransInputs();
+};
 </script>
-</div>
 </body>
-
 </html>
-
