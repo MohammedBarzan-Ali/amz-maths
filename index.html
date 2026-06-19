@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AMZ Mathematics</title>
+<title>SolverX</title>
 
 <link rel="icon" type="image/png" sizes="16x16" href="59EC2F78-CADD-451C-8A11-7000DF006FBC.png">
 <link rel="icon" type="image/png" sizes="32x32" href="59EC2F78-CADD-451C-8A11-7000DF006FBC.png">
@@ -517,6 +517,46 @@ footer span{color:var(--accent);font-weight:700;}
   display:block;margin-bottom:6px;
 }
 
+/* ══════════════════════════════════════════
+   NEW PAGES — DASHBOARD / MATH / LOGIC DESIGN /
+   ABOUT / CONTACT  (added only, nothing above touched)
+══════════════════════════════════════════ */
+#page-dashboard,#page-math,#page-logicdesign,#page-logicdesignsolver,#page-about,#page-contactus{
+  padding-top:68px;min-height:100vh;
+}
+.cat-title{display:flex;align-items:center;gap:12px;max-width:1400px;margin:40px auto 20px;padding:0 40px;}
+.cat-title h3{font-size:1rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--text);white-space:nowrap;}
+.cat-title .cat-line{flex:1;height:1px;background:var(--border);}
+.cat-title .cat-tag{font-size:0.7rem;font-weight:700;color:var(--accent);font-family:'JetBrains Mono',monospace;letter-spacing:1px;padding:3px 10px;border:1px solid rgba(108,99,255,0.3);border-radius:100px;background:rgba(108,99,255,0.08);white-space:nowrap;}
+
+.about-section{max-width:880px;margin:0 auto;padding:0 40px 60px;}
+.about-section p{color:var(--muted);font-size:0.95rem;line-height:1.85;margin-bottom:18px;}
+.about-section h4{font-size:0.85rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1.2px;margin:36px 0 14px;}
+.about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-bottom:8px;}
+.about-mini-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;transition:all 0.3s;}
+.about-mini-card:hover{transform:translateY(-4px);border-color:rgba(108,99,255,0.35);}
+.about-mini-card .mini-icon{font-size:1.4rem;margin-bottom:10px;}
+.about-mini-card h5{font-size:0.95rem;font-weight:700;margin-bottom:6px;color:var(--text);}
+.about-mini-card p{font-size:0.82rem;color:var(--muted);line-height:1.6;margin:0;}
+.tech-row{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 12px;}
+
+.contact-wrap{display:grid;grid-template-columns:1.2fr 0.8fr;gap:28px;max-width:980px;margin:32px auto 0;padding:0 40px 80px;align-items:start;}
+.contact-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;}
+.contact-card h4{font-size:0.9rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;}
+.social-row{display:flex;flex-direction:column;gap:10px;}
+.social-link{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);text-decoration:none;font-size:0.85rem;font-weight:600;transition:all 0.25s;}
+.social-link:hover{border-color:var(--accent);transform:translateX(4px);}
+.social-link .social-icon{font-size:1.1rem;width:24px;text-align:center;}
+.contact-note{font-size:0.78rem;color:var(--muted);line-height:1.6;margin-top:18px;}
+.form-success{display:none;margin-top:16px;padding:14px 18px;background:rgba(67,233,123,0.1);border:1px solid rgba(67,233,123,0.3);border-radius:10px;color:var(--accent3);font-size:0.85rem;font-weight:600;text-align:center;}
+.form-success.show{display:block;animation:stepIn 0.4s ease both;}
+
+@media(max-width:760px){
+  .contact-wrap{grid-template-columns:1fr;padding:0 16px 60px;}
+  .cat-title{padding:0 16px;}
+  .about-section{padding:0 16px 40px;}
+}
+
 @media(max-width:600px){
   nav{padding:0 16px;}
   .nav-links a{padding:6px 10px;font-size:0.7rem;letter-spacing:0.5px;}
@@ -552,16 +592,17 @@ footer span{color:var(--accent);font-weight:700;}
 <nav>
   <div class="nav-logo" onclick="showPage('home')">
     <div class="logo-text">
-      <span class="logo-main">AMZ</span>
-      <span class="logo-sub">Mathematics</span>
+      <span class="logo-main">Solver-X</span>
+      
     </div>
   </div>
 
   <div class="nav-links" id="navLinks">
-    <a class="active" onclick="showPage('home')">Home</a>
+    <a class="active" onclick="showPage('dashboard')">Dashboard</a>
     <a onclick="showPage('solver')">Solver</a>
     <a onclick="showPage('team')">Meet the Team</a>
-    <a onclick="showPage('contact')">Contact</a>
+    <a onclick="showPage('contactus')">Contact</a>
+    
   </div>
 
   <div class="hamburger" id="hamburger" onclick="toggleMenu()">
@@ -570,7 +611,7 @@ footer span{color:var(--accent);font-weight:700;}
 </nav>
 
 <!-- ══════════════ HOME PAGE ══════════════ -->
-<div id="page-home" class="page active">
+  <div id="page-home" class="page">
   <div class="hero">
     <div class="hero-glow"></div>
     <div class="hero-badge">AMZ GROUP — Mathematics</div>
@@ -652,7 +693,7 @@ footer span{color:var(--accent);font-weight:700;}
     </div>
   </div>
 
-  <footer>Built by <span>AMZ GROUP</span> · Lebanese French University </footer>
+  
 </div>
 
 <!-- ══════════════ SOLVER PAGE ══════════════ -->
@@ -766,7 +807,7 @@ footer span{color:var(--accent);font-weight:700;}
   <!-- ── BINARY ── -->
   <div id="solver-binary" class="solver-section" style="display:none;">
     <div class="solver-header">
-      <button class="back-btn" onclick="showPage('home')">← Back</button>
+      <button class="back-btn" onclick="showPage('dashboard')">← Back</button>
       <h2>Binary System</h2>
       <div class="subtitle">Enter binary numbers (only 0s and 1s) or decimal integers for conversion</div>
     </div>
@@ -843,7 +884,7 @@ footer span{color:var(--accent);font-weight:700;}
   <!-- ── MATRIX ── -->
   <div id="solver-matrix" class="solver-section" style="display:none;">
     <div class="solver-header">
-      <button class="back-btn" onclick="showPage('home')">← Back</button>
+      <button class="back-btn" onclick="showPage('dashboard')">← Back</button>
       <h2>Matrix</h2>
       <div class="subtitle">Specify rows and columns, fill in the values, then solve</div>
     </div>
@@ -916,7 +957,7 @@ footer span{color:var(--accent);font-weight:700;}
   <!-- ── PRIME ── -->
   <div id="solver-prime" class="solver-section" style="display:none;">
     <div class="solver-header">
-      <button class="back-btn" onclick="showPage('home')">← Back</button>
+      <button class="back-btn" onclick="showPage('dashboard')">← Back</button>
       <h2>Prime Numbers</h2>
       <div class="subtitle">Test primality, list primes in a range, or factorize numbers</div>
     </div>
@@ -956,7 +997,7 @@ footer span{color:var(--accent);font-weight:700;}
   <!-- ── DERIVATIVES ── -->
   <div id="solver-deriv" class="solver-section" style="display:none;">
     <div class="solver-header">
-      <button class="back-btn" onclick="showPage('home')">← Back</button>
+      <button class="back-btn" onclick="showPage('dashboard')">← Back</button>
       <h2>Derivatives</h2>
       <div class="subtitle">Find derivatives of common function types step by step</div>
     </div>
@@ -1066,7 +1107,7 @@ footer span{color:var(--accent);font-weight:700;}
   <!-- ── INTEGRALS ── -->
   <div id="solver-integ" class="solver-section" style="display:none;">
     <div class="solver-header">
-      <button class="back-btn" onclick="showPage('home')">← Back</button>
+      <button class="back-btn" onclick="showPage('dashboard')">← Back</button>
       <h2>Integrals</h2>
       <div class="subtitle">Compute indefinite and definite integrals step by step</div>
     </div>
@@ -1129,7 +1170,7 @@ footer span{color:var(--accent);font-weight:700;}
   <!-- ── SEQUENCES ── -->
   <div id="solver-seq" class="solver-section" style="display:none;">
     <div class="solver-header">
-      <button class="back-btn" onclick="showPage('home')">← Back</button>
+      <button class="back-btn" onclick="showPage('dashboard')">← Back</button>
       <h2>Sequences</h2>
       <div class="subtitle">Find the nth term and partial sums of arithmetic and geometric sequences</div>
     </div>
@@ -1173,7 +1214,7 @@ footer span{color:var(--accent);font-weight:700;}
   <!-- ── SERIES ── -->
   <div id="solver-series" class="solver-section" style="display:none;">
     <div class="solver-header">
-      <button class="back-btn" onclick="showPage('home')">← Back</button>
+      <button class="back-btn" onclick="showPage('dashboard')">← Back</button>
       <h2>Series</h2>
       <div class="subtitle">Calculate sums and test convergence of arithmetic and geometric series</div>
     </div>
@@ -1234,19 +1275,19 @@ footer span{color:var(--accent);font-weight:700;}
     <div class="team-hero-glow"></div>
     <div class="team-eyebrow">
       <span class="dot-pulse"></span>
-      AMZ GROUP
+      Mohammed Barzan Ali
     </div>
-    <h1>The <em>Minds</em> Behind<br>AMZ Mathematics</h1>
+    <h1>The <em>Minds</em> Behind<br>SolverX</h1>
     <p>A dedicated student tech team from Lebanese French University, IT Department — building tools that make learning beautiful.</p>
   </div>
 
   <div class="team-stats">
     <div class="team-stat">
-      <div class="stat-num">3</div>
+      <div class="stat-num">2</div>
       <div class="stat-label">Members</div>
     </div>
     <div class="team-stat">
-      <div class="stat-num">9</div>
+      <div class="stat-num">13</div>
       <div class="stat-label">Math Topics</div>
     </div>
     <div class="team-stat">
@@ -1306,7 +1347,7 @@ footer span{color:var(--accent);font-weight:700;}
         <div class="card-banner-pattern" style="background-image:radial-gradient(circle at 20% 55%,rgba(67,233,123,0.16) 0%,transparent 55%),radial-gradient(circle at 80% 30%,rgba(0,206,130,0.1) 0%,transparent 50%);"></div>
         <div class="card-banner-lines"></div>
         
-        <div class="card-role-badge" style="color:#43e97b; z-index: 20 !important;">CO LEADER</div>
+        <div class="card-role-badge" style="color:#43e97b; z-index: 20 !important;">Manager</div>
       </div>
       <div class="card-body" style="padding-top: 1.5rem; position: relative; z-index: 5;">
         <div class="card-name">Anas Mohsin</div>
@@ -1332,39 +1373,10 @@ footer span{color:var(--accent);font-weight:700;}
   
 
 
-    <div class="team-card" style="--card-accent-color:#a78bfa; --card-banner-gradient:linear-gradient(135deg,#0d0818,#140d28); overflow: hidden;">
-      <div class="card-banner" style="position: relative; height: 160px; overflow: hidden; background: none !important;">
-        <img src="IMG_2723.jpeg" alt="Zhalla" style="width: 100% !important; height: 100% !important; object-fit: cover !important; position: absolute !important; top: 0 !important; left: 0 !important; z-index: 10 !important; display: block;">
-        
-        <div class="card-banner-bg"></div>
-        <div class="card-banner-pattern" style="background-image:radial-gradient(circle at 30% 50%,rgba(167,139,250,0.18) 0%,transparent 55%),radial-gradient(circle at 70% 25%,rgba(108,99,255,0.12) 0%,transparent 50%);"></div>
-        <div class="card-banner-lines"></div>
-        
-        <div class="card-role-badge" style="color:#a78bfa; z-index: 20 !important;">TEAM MANGER</div>
-      </div>
-      <div class="card-body" style="padding-top: 1.5rem; position: relative; z-index: 5;">
-        <div class="card-name">Zhalla Karwan</div>
-        <div class="card-title">Core Developer</div>
-        <div class="card-bio">A key contributor to the AMZ GROUP ecosystem. Brings precision and creative problem-solving to every project, helping build tools that students actually love to use.</div>
-        <div class="card-skills">
-          <span class="skill-tag">Frontend</span>
-          <span class="skill-tag">Problem Solving</span>
-          <span class="skill-tag">CSS</span>
-          <span class="skill-tag">Teamwork</span>
-        </div>
-        <div class="card-divider"></div>
-        <div class="card-meta">
-          <div class="card-dept">
-            <span class="card-dept-icon"></span>
-           
-          </div>
-          <div class="card-index">03</div>
-        </div>
-      </div>
+    
     </div>
 
-    </div>
-  <footer>Built by <span>AMZ GROUP</span> · Lebanese French University</footer>
+    
 </div>
 
 <!-- ══════════════ CONTACT PAGE ══════════════ -->
@@ -1389,6 +1401,345 @@ footer span{color:var(--accent);font-weight:700;}
       <a class="page-download-btn" href="manifest.json" download>📱 Install as PWA</a>
     </div>
   </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     DASHBOARD PAGE  (NEW — added without touching anything above)
+══════════════════════════════════════════ -->
+<div id="page-dashboard" class="page active">
+  <div class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-badge">KURDISTAN</div>
+    <h1>Solver<span class="hl">X</span></h1>
+    <p>Every part of AMZ Mathematics in one place — solvers, number systems, the people behind it, and ways to reach us.</p>
+  </div>
+
+  <div class="cards-grid">
+    <div class="subject-card" style="--card-color:#6c63ff;--card-glow:rgba(108,99,255,0.08);--card-icon-bg:rgba(108,99,255,0.15);" onclick="showPage('math')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon">Σ</div>
+      <h3>Mathematics</h3>
+      <p>Browse all math solvers organized by category — algebra, calculus, sequences and more.</p>
+      <div class="card-topics"><span class="topic-chip">9 Topics</span><span class="topic-chip">Step-by-step</span></div>
+    </div>
+
+    <div class="subject-card" style="--card-color:#f9ca24;--card-glow:rgba(249,202,36,0.06);--card-icon-bg:rgba(249,202,36,0.12);" onclick="showPage('logicdesign')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon" style="color:#f9ca24;">⌬</div>
+      <h3>Logic Design</h3>
+      <p>Convert between Binary, Decimal, Octal and Hexadecimal number systems, step by step.</p>
+      <div class="card-topics"><span class="topic-chip">Binary</span><span class="topic-chip">Octal</span><span class="topic-chip">Hex</span></div>
+    </div>
+
+    <div class="subject-card" style="--card-color:#00d1ff;--card-glow:rgba(0,209,255,0.07);--card-icon-bg:rgba(0,209,255,0.13);" onclick="showPage('team')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon" style="color:#00d1ff;">☻</div>
+      <h3>Meet The Team</h3>
+      <p>Get to know the people behind AMZ GROUP and the SolverX platform.</p>
+      <div class="card-topics"><span class="topic-chip">2 Members</span><span class="topic-chip">LFU</span></div>
+    </div>
+
+    <div class="subject-card" style="--card-color:#a78bfa;--card-glow:rgba(167,139,250,0.07);--card-icon-bg:rgba(167,139,250,0.13);" onclick="showPage('about')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon" style="color:#a78bfa;">ℹ</div>
+      <h3>About</h3>
+      <p>The project's story, objectives, technologies used, and where it's headed next.</p>
+      <div class="card-topics"><span class="topic-chip">Project Info</span><span class="topic-chip">Vision</span></div>
+    </div>
+
+    <div class="subject-card" style="--card-color:#43e97b;--card-glow:rgba(67,233,123,0.06);--card-icon-bg:rgba(67,233,123,0.12);" onclick="showPage('contactus')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon" style="color:#43e97b;">✉</div>
+      <h3>Contact</h3>
+      <p>Send us a message directly, or connect with AMZ GROUP on social media.</p>
+      <div class="card-topics"><span class="topic-chip">Form</span><span class="topic-chip">Social</span></div>
+    </div>
+  </div>
+
+  <footer>Built by <span>Mohammed Barzan Shexbzeny</span> </footer>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MATHEMATICS DASHBOARD PAGE  (NEW)
+     Reuses the existing openSolver() function and existing
+     solver sections/topics — no math logic duplicated.
+══════════════════════════════════════════ -->
+<div id="page-math" class="page">
+  <div class="solver-header">
+    <button class="back-btn" onclick="showPage('dashboard')">← Back to Dashboard</button>
+    <h2>Mathematics</h2>
+    <div class="subtitle">All 9 topics, organized by category. Pick one to open the step-by-step solver.</div>
+  </div>
+
+  <div class="cat-title"><h3>Foundations</h3><div class="cat-line"></div><span class="cat-tag">3 topics</span></div>
+  <div class="cards-grid" style="padding-bottom:8px;">
+    <div class="subject-card" style="--card-color:#6c63ff;--card-glow:rgba(108,99,255,0.08);--card-icon-bg:rgba(108,99,255,0.15);" onclick="openSolver('set')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon">∪</div>
+      <h3>Set Theory</h3>
+      <p>Unions, intersections, differences, complements and subset checks with full step-by-step workings.</p>
+      <div class="card-topics"><span class="topic-chip">Union</span><span class="topic-chip">Intersection</span><span class="topic-chip">Subset</span></div>
+    </div>
+    <div class="subject-card" style="--card-color:#f9ca24;--card-glow:rgba(249,202,36,0.06);--card-icon-bg:rgba(249,202,36,0.12);" onclick="openSolver('logic')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon" style="color:#f9ca24;">⊕</div>
+      <h3>Logic</h3>
+      <p>Evaluate logical propositions and auto-generate truth tables using AND, OR, NOT, IMPLIES, XOR.</p>
+      <div class="card-topics"><span class="topic-chip">Truth Table</span><span class="topic-chip">Evaluate</span></div>
+    </div>
+    <div class="subject-card" style="--card-color:#ff9f43;--card-glow:rgba(255,159,67,0.06);--card-icon-bg:rgba(255,159,67,0.12);" onclick="openSolver('prime')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon" style="color:#ff9f43;">ℙ</div>
+      <h3>Prime Numbers</h3>
+      <p>Check primality, list all primes in a range, and factorize using step-by-step divisibility testing.</p>
+      <div class="card-topics"><span class="topic-chip">Primality</span><span class="topic-chip">Factorization</span></div>
+    </div>
+  </div>
+
+  <div class="cat-title"><h3>Numbers &amp; Matrices</h3><div class="cat-line"></div><span class="cat-tag">2 topics</span></div>
+  <div class="cards-grid" style="padding-bottom:8px;">
+    <div class="subject-card" style="--card-color:#ff6b6b;--card-glow:rgba(255,107,107,0.06);--card-icon-bg:rgba(255,107,107,0.12);" onclick="openSolver('binary')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon" style="color:#ff6b6b;font-size:1.1rem;font-weight:800;">01</div>
+      <h3>Binary System</h3>
+      <p>Binary arithmetic and conversions between binary and decimal with complete bit-level steps.</p>
+      <div class="card-topics"><span class="topic-chip">Arithmetic</span><span class="topic-chip">Dec↔Bin</span></div>
+    </div>
+    <div class="subject-card" style="--card-color:#43e97b;--card-glow:rgba(67,233,123,0.06);--card-icon-bg:rgba(67,233,123,0.12);" onclick="openSolver('matrix')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon" style="color:#43e97b;">⊞</div>
+      <h3>Matrix</h3>
+      <p>Add, subtract, multiply matrices, find determinants and transpose with element-by-element breakdown.</p>
+      <div class="card-topics"><span class="topic-chip">Determinant</span><span class="topic-chip">Transpose</span></div>
+    </div>
+  </div>
+
+  <div class="cat-title"><h3>Calculus</h3><div class="cat-line"></div><span class="cat-tag">2 topics</span></div>
+  <div class="cards-grid" style="padding-bottom:8px;">
+    <div class="subject-card" style="--card-color:#a29bfe;--card-glow:rgba(162,155,254,0.07);--card-icon-bg:rgba(162,155,254,0.13);" onclick="openSolver('deriv')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon" style="color:#a29bfe;">d/dx</div>
+      <h3>Derivatives</h3>
+      <p>Differentiate polynomial, trigonometric, exponential and logarithmic functions step by step.</p>
+      <div class="card-topics"><span class="topic-chip">Power Rule</span><span class="topic-chip">Chain Rule</span></div>
+    </div>
+    <div class="subject-card" style="--card-color:#fd79a8;--card-glow:rgba(253,121,168,0.07);--card-icon-bg:rgba(253,121,168,0.13);" onclick="openSolver('integ')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon" style="color:#fd79a8;">∫</div>
+      <h3>Integrals</h3>
+      <p>Compute definite and indefinite integrals of common functions with full antiderivative steps.</p>
+      <div class="card-topics"><span class="topic-chip">Indefinite</span><span class="topic-chip">Definite</span></div>
+    </div>
+  </div>
+
+  <div class="cat-title"><h3>Sequences &amp; Series</h3><div class="cat-line"></div><span class="cat-tag">2 topics</span></div>
+  <div class="cards-grid" style="padding-bottom:80px;">
+    <div class="subject-card" style="--card-color:#00cec9;--card-glow:rgba(0,206,201,0.07);--card-icon-bg:rgba(0,206,201,0.13);" onclick="openSolver('seq')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon" style="color:#00cec9;font-size:1.3rem;">aₙ</div>
+      <h3>Sequences</h3>
+      <p>Find the nth term and partial sums of arithmetic and geometric sequences step by step.</p>
+      <div class="card-topics"><span class="topic-chip">Arithmetic</span><span class="topic-chip">Geometric</span></div>
+    </div>
+    <div class="subject-card" style="--card-color:#e17055;--card-glow:rgba(225,112,85,0.07);--card-icon-bg:rgba(225,112,85,0.13);" onclick="openSolver('series')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon" style="color:#e17055;">Σ</div>
+      <h3>Series</h3>
+      <p>Calculate sums of arithmetic and geometric series, and test convergence of infinite geometric series.</p>
+      <div class="card-topics"><span class="topic-chip">Convergence</span></div>
+    </div>
+  </div>
+
+  
+</div>
+
+<!-- ══════════════════════════════════════════
+     LOGIC DESIGN — HUB PAGE  (NEW)
+══════════════════════════════════════════ -->
+<div id="page-logicdesign" class="page">
+  <div class="solver-header">
+    <button class="back-btn" onclick="showPage('dashboard')">← Back to Dashboard</button>
+    <h2>Logic Design</h2>
+    <div class="subtitle">Number systems used in digital logic — open a topic to convert step by step.</div>
+  </div>
+  <div class="cards-grid" style="padding-top:32px;">
+    <div class="subject-card" style="--card-color:#ff6b6b;--card-glow:rgba(255,107,107,0.06);--card-icon-bg:rgba(255,107,107,0.12);" onclick="openLogicDesign('binary')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon" style="color:#ff6b6b;font-size:1.1rem;font-weight:800;">01</div>
+      <h3>Binary Number System</h3>
+      <p>Base 2 — the native language of digital circuits, using only the digits 0 and 1.</p>
+      <div class="card-topics"><span class="topic-chip">Base 2</span><span class="topic-chip">Convert</span></div>
+    </div>
+    <div class="subject-card" style="--card-color:#00d1ff;--card-glow:rgba(0,209,255,0.07);--card-icon-bg:rgba(0,209,255,0.13);" onclick="openLogicDesign('decimal')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon" style="color:#00d1ff;font-size:1.1rem;font-weight:800;">10</div>
+      <h3>Decimal Number System</h3>
+      <p>Base 10 — the everyday number system built from the ten digits 0 through 9.</p>
+      <div class="card-topics"><span class="topic-chip">Base 10</span><span class="topic-chip">Convert</span></div>
+    </div>
+    <div class="subject-card" style="--card-color:#f9ca24;--card-glow:rgba(249,202,36,0.06);--card-icon-bg:rgba(249,202,36,0.12);" onclick="openLogicDesign('octal')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon" style="color:#f9ca24;font-size:1.1rem;font-weight:800;">08</div>
+      <h3>Octal Number System</h3>
+      <p>Base 8 — uses digits 0 to 7, historically a compact stand-in for groups of 3 bits.</p>
+      <div class="card-topics"><span class="topic-chip">Base 8</span><span class="topic-chip">Convert</span></div>
+    </div>
+    <div class="subject-card" style="--card-color:#a78bfa;--card-glow:rgba(167,139,250,0.07);--card-icon-bg:rgba(167,139,250,0.13);" onclick="openLogicDesign('hex')">
+      <div class="card-arrow">↗</div>
+      <div class="card-icon" style="color:#a78bfa;font-size:1.1rem;font-weight:800;">16</div>
+      <h3>Hexadecimal Number System</h3>
+      <p>Base 16 — uses 0–9 and A–F, a compact stand-in for groups of 4 bits.</p>
+      <div class="card-topics"><span class="topic-chip">Base 16</span><span class="topic-chip">Convert</span></div>
+    </div>
+  </div>
+  
+</div>
+
+<!-- ══════════════════════════════════════════
+     LOGIC DESIGN — CONVERTER PAGE  (NEW)
+══════════════════════════════════════════ -->
+<div id="page-logicdesignsolver" class="page solver-page">
+  <div class="solver-header">
+    <button class="back-btn" onclick="showPage('logicdesign')">← Back</button>
+    <h2>Logic Design — Number Systems</h2>
+    <div class="subtitle">Enter a number in the selected base — every conversion is shown step by step.</div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="binary" onclick="ldSwitchTab('binary',this)">Binary</button>
+    <button class="tab-btn" data-tab="decimal" onclick="ldSwitchTab('decimal',this)">Decimal</button>
+    <button class="tab-btn" data-tab="octal" onclick="ldSwitchTab('octal',this)">Octal</button>
+    <button class="tab-btn" data-tab="hex" onclick="ldSwitchTab('hex',this)">Hexadecimal</button>
+  </div>
+  <div class="solver-body">
+
+    <div id="ld-panel-binary" class="topic-panel active">
+      <div class="info-box"><strong>Binary (Base 2):</strong> uses only the digits 0 and 1. Each position represents a power of 2 — it's the native language of digital electronics and logic gates.</div>
+      <div class="input-section"><h4>Convert a Binary Number</h4>
+        <div class="field-row">
+          <div class="field-group"><label>Binary value</label><input type="text" id="ld-binary-input" placeholder="1011"></div>
+        </div>
+        <button class="btn-primary" onclick="ldConvert('binary')">Convert →</button>
+      </div>
+      <div id="ld-res-binary" class="result-panel"></div>
+    </div>
+
+    <div id="ld-panel-decimal" class="topic-panel">
+      <div class="info-box"><strong>Decimal (Base 10):</strong> the number system used in everyday life, built from the ten digits 0–9. Each position represents a power of 10.</div>
+      <div class="input-section"><h4>Convert a Decimal Number</h4>
+        <div class="field-row">
+          <div class="field-group"><label>Decimal value</label><input type="text" id="ld-decimal-input" placeholder="173"></div>
+        </div>
+        <button class="btn-primary" onclick="ldConvert('decimal')">Convert →</button>
+      </div>
+      <div id="ld-res-decimal" class="result-panel"></div>
+    </div>
+
+    <div id="ld-panel-octal" class="topic-panel">
+      <div class="info-box"><strong>Octal (Base 8):</strong> uses digits 0 to 7. Each position represents a power of 8 — historically used as a compact way to group 3 binary bits.</div>
+      <div class="input-section"><h4>Convert an Octal Number</h4>
+        <div class="field-row">
+          <div class="field-group"><label>Octal value</label><input type="text" id="ld-octal-input" placeholder="255"></div>
+        </div>
+        <button class="btn-primary" onclick="ldConvert('octal')">Convert →</button>
+      </div>
+      <div id="ld-res-octal" class="result-panel"></div>
+    </div>
+
+    <div id="ld-panel-hex" class="topic-panel">
+      <div class="info-box"><strong>Hexadecimal (Base 16):</strong> uses sixteen symbols, 0–9 and A–F. Each position represents a power of 16 — commonly used for memory addresses and color codes (4 bits per digit).</div>
+      <div class="input-section"><h4>Convert a Hexadecimal Number</h4>
+        <div class="field-row">
+          <div class="field-group"><label>Hexadecimal value</label><input type="text" id="ld-hex-input" placeholder="2F3"></div>
+        </div>
+        <button class="btn-primary" onclick="ldConvert('hex')">Convert →</button>
+      </div>
+      <div id="ld-res-hex" class="result-panel"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     ABOUT PAGE  (NEW)
+══════════════════════════════════════════ -->
+<div id="page-about" class="page">
+  <div class="solver-header">
+    <button class="back-btn" onclick="showPage('dashboard')">← Back to Dashboard</button>
+    <h2>About <span style="color:var(--accent)">SolverX</span></h2>
+    <div class="subtitle">The story, the goals, and the technology behind this project.</div>
+  </div>
+
+  <div class="about-section" style="margin-top:32px;">
+    <p>AMZ Mathematics is an interactive learning platform built by <strong style="color:var(--text)">AMZ GROUP</strong>, a student tech team from the IT Department at Lebanese French University. It turns nine major math topics — and now digital number systems — into solvers that show every step of the working, not just the final answer.</p>
+    <p>The project started as a small classroom tool and grew into a full platform: a dark, glassmorphism-inspired interface, instant calculations, and clear explanations designed to help students actually understand the "how," not just copy the "what."</p>
+
+    <h4>Objectives</h4>
+    <div class="about-grid">
+      <div class="about-mini-card">
+        <div class="mini-icon">🎯</div>
+        <h5>Clarity</h5>
+        <p>Turn abstract formulas into step-by-step walkthroughs anyone can follow.</p>
+      </div>
+      <div class="about-mini-card">
+        <div class="mini-icon">⚡</div>
+        <h5>Speed</h5>
+        <p>Instant, accurate results across math topics and number system conversions.</p>
+      </div>
+      <div class="about-mini-card">
+        <div class="mini-icon">📱</div>
+        <h5>Access</h5>
+        <p>A responsive, installable PWA that works smoothly on any device, anywhere.</p>
+      </div>
+    </div>
+
+    <h4>Technologies Used</h4>
+    <div class="tech-row">
+      <span class="topic-chip">HTML5</span><span class="topic-chip">CSS3</span><span class="topic-chip">Vanilla JavaScript</span><span class="topic-chip">Progressive Web App</span><span class="topic-chip">Google Fonts</span>
+    </div>
+
+    <h4>Vision</h4>
+    <p>AMZ GROUP wants AMZ Mathematics to grow into a complete reference for students — covering more branches of mathematics and logic design, while staying fast, free, and refreshingly simple to use.</p>
+  </div>
+
+  
+</div>
+
+<!-- ══════════════════════════════════════════
+     CONTACT (DASHBOARD) PAGE  (NEW)
+══════════════════════════════════════════ -->
+<div id="page-contactus" class="page">
+  <div class="solver-header">
+    <button class="back-btn" onclick="showPage('dashboard')">← Back to Dashboard</button>
+    <h2>Contact <span style="color:var(--accent)">Us</span></h2>
+    <div class="subtitle">Have a question, suggestion, or want to collaborate? Send us a message.</div>
+  </div>
+
+  <div class="contact-wrap">
+    <div class="contact-card">
+      <h4>Send a Message</h4>
+      <div class="contact-form">
+        <div class="field-group"><label>Name</label><input type="text" id="cf-name" placeholder="Your name"></div>
+        <div class="field-group"><label>Email</label><input type="text" id="cf-email" placeholder="you@example.com"></div>
+        <div class="field-group"><label>Subject</label><input type="text" id="cf-subject" placeholder="What's this about?"></div>
+        <div class="field-group"><label>Message</label><textarea id="cf-message" placeholder="Write your message..."></textarea></div>
+        <button class="btn-primary" onclick="sendContactMessage('muhammadbarzan889@gmail.com')">Send a Message</button>
+        <div id="cf-success" class="form-success"></div>
+      </div>
+    </div>
+
+    <div class="contact-card">
+      <h4>Connect With Us</h4>
+      <div class="social-row">
+        <a class="social-link" href="Mohammed Email"><span class="social-icon">📧</span>muhammadbarzan889@gmail.com</a>
+        <a class="social-link" href="https://amzgroup.xyz" target="_blank"><span class="social-icon">🌐</span> amzgroup.xyz</a>
+        <a class="social-link" href="https://www.instagram.com/mohammed_haji_barzan?igsh=dDhhemtpNXBob2Ju&utm_source=qr"><span class="social-icon">📷</span> Instagram</a>
+       
+      </div>
+      <p class="contact-note">Social links are placeholders — swap in AMZ GROUP's real handles whenever they're ready. The "Send Message" button opens your email app with the message pre-filled.</p>
+    </div>
+  </div>
+
+  
 </div>
 
 <!-- ══════════════════════════════════════════
@@ -1417,6 +1768,24 @@ function showPage(pg) {
     links[3].classList.add('active');
   } else if (pg === 'download') {
     document.getElementById('page-download').classList.add('active');
+    links[4].classList.add('active');
+  } else if (pg === 'dashboard') {
+    document.getElementById('page-dashboard').classList.add('active');
+    links[4].classList.add('active');
+  } else if (pg === 'math') {
+    document.getElementById('page-math').classList.add('active');
+    links[4].classList.add('active');
+  } else if (pg === 'logicdesign') {
+    document.getElementById('page-logicdesign').classList.add('active');
+    links[4].classList.add('active');
+  } else if (pg === 'logicdesignsolver') {
+    document.getElementById('page-logicdesignsolver').classList.add('active');
+    links[4].classList.add('active');
+  } else if (pg === 'about') {
+    document.getElementById('page-about').classList.add('active');
+    links[4].classList.add('active');
+  } else if (pg === 'contactus') {
+    document.getElementById('page-contactus').classList.add('active');
     links[4].classList.add('active');
   }
   window.scrollTo(0, 0);
@@ -2362,6 +2731,137 @@ function solveInfSeries() {
       {title:'Calculate', body:'S&#8734; = <span class="rv">' + parseFloat(sinf.toFixed(6)) + '</span>'}
     ], 'S&#8734; = ' + parseFloat(sinf.toFixed(6)));
   }
+}
+
+/* ════════════════════════════════════════
+   LOGIC DESIGN — NUMBER SYSTEMS  (NEW)
+   Self-contained: new function names only,
+   nothing above is read or modified.
+════════════════════════════════════════ */
+var LD_BASES = { binary:2, decimal:10, octal:8, hex:16 };
+var LD_INFO = {
+  binary:  { base:2,  name:'Binary',      digits:'0 and 1' },
+  decimal: { base:10, name:'Decimal',     digits:'0 to 9' },
+  octal:   { base:8,  name:'Octal',       digits:'0 to 7' },
+  hex:     { base:16, name:'Hexadecimal', digits:'0-9 and A-F' }
+};
+
+function openLogicDesign(topic) {
+  showPage('logicdesignsolver');
+  var btn = document.querySelector('#page-logicdesignsolver .tab-btn[data-tab="' + topic + '"]');
+  if (btn) ldSwitchTab(topic, btn);
+}
+
+function ldSwitchTab(topic, btn) {
+  var sec = document.getElementById('page-logicdesignsolver');
+  sec.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  sec.querySelectorAll('.topic-panel').forEach(function(p){ p.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('ld-panel-' + topic).classList.add('active');
+}
+
+function ldIsValid(str, base) {
+  if (!str) return false;
+  if (base === 2) return /^[01]+$/.test(str);
+  if (base === 8) return /^[0-7]+$/.test(str);
+  if (base === 10) return /^[0-9]+$/.test(str);
+  return /^[0-9A-Fa-f]+$/.test(str);
+}
+
+function ldDecToBase(n, base) {
+  if (n === 0) return { str:'0', log:'0 &#247; ' + base + ' &#8594; the value is already <span class="rv">0</span><br>' };
+  var x = n, digitsArr = [], log = '';
+  while (x > 0) {
+    var rem = x % base;
+    var remCh = rem.toString(base).toUpperCase();
+    var q = Math.floor(x / base);
+    log += x + ' &#247; ' + base + ' = <span class="hl">' + q + '</span> &nbsp; remainder = <span class="rv">' + remCh + '</span><br>';
+    digitsArr.push(remCh);
+    x = q;
+  }
+  return { str: digitsArr.reverse().join(''), log: log };
+}
+
+function ldConvert(topic) {
+  var info = LD_INFO[topic];
+  var base = info.base;
+  var raw = document.getElementById('ld-' + topic + '-input').value.trim();
+
+  if (!ldIsValid(raw, base)) {
+    showError('ld-res-' + topic, 'Enter a valid ' + info.name + ' number (allowed digits: ' + info.digits + ').');
+    return;
+  }
+
+  var clean = raw.toUpperCase();
+  var steps = [];
+  steps.push({ title:'Input number', body:'<span class="hl">' + clean + '</span> &nbsp; (base ' + base + ' — ' + info.name + ')' });
+
+  var total;
+  if (base === 10) {
+    total = parseInt(clean, 10);
+    steps.push({ title:'Already in decimal', body:'Decimal value = <span class="rv">' + total + '</span>' });
+  } else {
+    var expLog = '', sum = 0;
+    for (var i = 0; i < clean.length; i++) {
+      var pos = clean.length - 1 - i;
+      var digitVal = parseInt(clean[i], base);
+      var val = digitVal * Math.pow(base, pos);
+      sum += val;
+      expLog += clean[i] + ' &times; ' + base + '<sup>' + pos + '</sup> = ' + digitVal + ' &times; ' + Math.pow(base, pos) + ' = <span class="hl">' + val + '</span><br>';
+    }
+    total = sum;
+    steps.push({ title:'Step 1 — Expand each digit by its positional value (base ' + base + ')', body: expLog });
+    steps.push({ title:'Step 2 — Sum all values to get the decimal equivalent', body:'Decimal value = <span class="rv">' + total + '</span>' });
+  }
+
+  var results = {};
+  results[base] = clean;
+  results[10] = String(total);
+
+  ['binary','octal','hex'].forEach(function(key) {
+    var tb = LD_INFO[key].base;
+    if (tb === base) return;
+    var r = ldDecToBase(total, tb);
+    results[tb] = r.str;
+    steps.push({
+      title:'Convert decimal ' + total + ' to ' + LD_INFO[key].name + ' (divide by ' + tb + ', read remainders bottom to top)',
+      body: r.log + 'Result = <span class="rv">' + r.str + '</span>'
+    });
+  });
+
+  var finalText = 'Binary = ' + results[2] + ' &nbsp;|&nbsp; Octal = ' + results[8] + ' &nbsp;|&nbsp; Decimal = ' + results[10] + ' &nbsp;|&nbsp; Hex = ' + results[16];
+  showResult('ld-res-' + topic, steps, finalText);
+}
+
+/* ════════════════════════════════════════
+   CONTACT FORM  (NEW)
+════════════════════════════════════════ */
+function sendContactMessage() {
+  var name = document.getElementById('cf-name').value.trim();
+  var email = document.getElementById('cf-email').value.trim();
+  var subject = document.getElementById('cf-subject').value.trim();
+  var message = document.getElementById('cf-message').value.trim();
+  var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  var note = document.getElementById('cf-success');
+
+  if (!name || !emailOk || !subject || !message) {
+    note.style.background = 'rgba(255,107,107,0.1)';
+    note.style.borderColor = 'rgba(255,107,107,0.3)';
+    note.style.color = 'var(--accent2)';
+    note.innerHTML = '&#9888; Please fill in all fields with a valid email address.';
+    note.classList.add('show');
+    return;
+  }
+
+  note.style.background = '';
+  note.style.borderColor = '';
+  note.style.color = '';
+  note.innerHTML = '&#10003; Opening your email app to send this message&#8230;';
+  note.classList.add('show');
+
+  var mailSubject = encodeURIComponent(subject);
+  var mailBody = encodeURIComponent(message + '\n\n— ' + name + ' (' + email + ')');
+  window.location.href = 'mailto:hello@amzgroup.xyz?subject=' + mailSubject + '&body=' + mailBody;
 }
 
 /* ────────────────────────────────────────
